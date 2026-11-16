@@ -30,9 +30,25 @@
 
   const send = (type) => vscode.postMessage({ type });
 
+  // 'rtl': ← Next on the left, ← = next. 'ltr': Next → on the right, → = next.
+  let direction = 'rtl';
+
+  function layoutNavigation(dir) {
+    direction = dir === 'ltr' ? 'ltr' : 'rtl';
+    const ltr = direction === 'ltr';
+    el.next.textContent = ltr ? 'Next →' : '← Next';
+    el.prev.textContent = ltr ? '← Prev' : 'Prev →';
+    el.next.title = ltr ? 'Next ayah (→)' : 'Next ayah (←)';
+    el.prev.title = ltr ? 'Previous ayah (←)' : 'Previous ayah (→)';
+    // Swap the buttons in the DOM (not just visually) so Tab order matches what is shown.
+    if (ltr) el.next.parentNode.insertBefore(el.prev, el.next);
+    else el.next.parentNode.insertBefore(el.next, el.prev);
+  }
+
   function render(p) {
     hidePopover();
     document.documentElement.style.setProperty('--arabic-size', p.arabicFontSize + 'px');
+    layoutNavigation(p.navigationDirection);
 
     el.surahLatin.textContent = p.surahNameLatin + ' · ' + p.ref;
     el.surahArabic.textContent = p.surahNameArabic;
@@ -126,11 +142,13 @@
   el.popoverClose.addEventListener('click', hidePopover);
   el.about.addEventListener('click', () => send('about'));
 
-  // RTL-natural keys: ← goes forward (next), → goes back (prev).
+  // Arrow keys follow the button layout (see layoutNavigation).
   document.addEventListener('keydown', (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.key === 'ArrowLeft') send('next');
-    else if (e.key === 'ArrowRight') send('prev');
+    const forward = direction === 'ltr' ? 'ArrowRight' : 'ArrowLeft';
+    const back = direction === 'ltr' ? 'ArrowLeft' : 'ArrowRight';
+    if (e.key === forward) send('next');
+    else if (e.key === back) send('prev');
     else if (e.key === 't' || e.key === 'T') {
       if (!el.toggleTranslation.disabled) send('toggleTranslation');
     } else if (e.key === 's' || e.key === 'S') translateSelection();

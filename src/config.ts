@@ -12,6 +12,7 @@ export function readSettings(): ReaderSettings {
     translation: resolveTranslation(c.get('translation')),
     showTranslation: c.get('showTranslation', true),
     arabicFontSize: clampFontSize(c.get('arabicFontSize')),
+    navigationDirection: c.get('navigationDirection') === 'ltr' ? 'ltr' : 'rtl',
   };
 }
 

@@ -15,7 +15,13 @@ const dataDir = join(__dirname, '..', 'data');
 const ayat: string[] = JSON.parse(readFileSync(join(dataDir, 'quran-uthmani.json'), 'utf8')).ayat;
 const sahih: string[] = JSON.parse(readFileSync(join(dataDir, 'trans', 'en.sahih.json'), 'utf8')).ayat;
 const store = new QuranStore(dataDir);
-const base: ReaderSettings = { mode: 'continuous', translation: 'en.sahih', showTranslation: true, arabicFontSize: 28 };
+const base: ReaderSettings = {
+  mode: 'continuous',
+  translation: 'en.sahih',
+  showTranslation: true,
+  arabicFontSize: 28,
+  navigationDirection: 'rtl',
+};
 
 describe('resolveTranslation', () => {
   it('uses a valid configured value', () => {
@@ -50,6 +56,10 @@ describe('buildPayload', () => {
     const p = await buildPayload(store, 7, base);
     assert.equal(p.ref, '2:1');
     assert.equal(`${p.basmalah} ${p.text}`, ayat[7]);
+  });
+  it('passes the navigation direction through', async () => {
+    assert.equal((await buildPayload(store, 0, base)).navigationDirection, 'rtl');
+    assert.equal((await buildPayload(store, 0, { ...base, navigationDirection: 'ltr' })).navigationDirection, 'ltr');
   });
   it('omits the translation when hidden or none', async () => {
     const hidden = await buildPayload(store, 0, { ...base, showTranslation: false });

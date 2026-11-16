@@ -6,11 +6,19 @@ import type { Mode } from './reader';
 
 export type TranslationSetting = TranslationId | 'none';
 
+/**
+ * Where Next sits and which arrow key moves forward.
+ * rtl: "← Next" on the left, ← = next (follows Arabic reading direction).
+ * ltr: "Next →" on the right, → = next.
+ */
+export type NavigationDirection = 'rtl' | 'ltr';
+
 export interface ReaderSettings {
   mode: Mode;
   translation: TranslationSetting;
   showTranslation: boolean;
   arabicFontSize: number;
+  navigationDirection: NavigationDirection;
 }
 
 export const FONT_SIZE_MIN = 12;
@@ -33,6 +41,7 @@ export interface RenderPayload {
   showTranslation: boolean;
   mode: Mode;
   arabicFontSize: number;
+  navigationDirection: NavigationDirection;
 }
 
 export const DEFAULT_TRANSLATION: TranslationId = 'en.sahih';
@@ -80,6 +89,7 @@ export async function buildPayload(store: QuranStore, index: number, settings: R
     showTranslation: settings.showTranslation,
     mode: settings.mode,
     arabicFontSize: clampFontSize(settings.arabicFontSize),
+    navigationDirection: settings.navigationDirection,
   };
 }
 

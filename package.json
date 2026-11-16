@@ -146,6 +146,19 @@
           "maximum": 72,
           "description": "Arabic text size in pixels."
         },
+        "quranForClaudeCode.navigationDirection": {
+          "type": "string",
+          "enum": [
+            "rtl",
+            "ltr"
+          ],
+          "enumDescriptions": [
+            "\"← Next\" on the left; ← key = next (follows Arabic reading direction).",
+            "\"Next →\" on the right; → key = next."
+          ],
+          "default": "rtl",
+          "description": "Which side the Next button is on, and which arrow key goes to the next ayah."
+        },
         "quranForClaudeCode.autoReveal": {
           "type": "boolean",
           "default": true,
