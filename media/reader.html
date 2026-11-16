@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src {{cspSource}}; font-src {{cspSource}}; img-src {{cspSource}}; script-src 'nonce-{{nonce}}';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{cssUri}}">
+  <title>Quran</title>
+</head>
+<body>
+  <main id="reader" aria-live="polite" hidden>
+    <header class="heading">
+      <span id="surah-latin" class="surah-latin"></span>
+      <span id="surah-arabic" class="surah-arabic" lang="ar" dir="rtl"></span>
+    </header>
+
+    <p id="basmalah" class="basmalah" lang="ar" dir="rtl" hidden></p>
+    <p id="arabic" class="arabic" lang="ar" dir="rtl"></p>
+
+    <section id="translation" class="translation" hidden>
+      <p id="translation-text" class="translation-text"></p>
+      <p id="translation-label" class="translation-label"></p>
+    </section>
+
+    <nav class="controls" aria-label="Reader controls">
+      <button id="next" type="button" title="Next ayah (←)">← Next</button>
+      <button id="prev" type="button" class="secondary" title="Previous ayah (→)">Prev →</button>
+      <span class="spacer"></span>
+      <button id="mode" type="button" class="secondary" title="Switch mode"></button>
+      <button id="toggle-translation" type="button" class="secondary" title="Show/hide translation (T)"></button>
+    </nav>
+  </main>
+
+  <p id="status" class="status">Loading…</p>
+
+  <script nonce="{{nonce}}" src="{{jsUri}}"></script>
+</body>
+</html>

@@ -21,6 +21,24 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "quranForClaudeCode",
+          "title": "Quran",
+          "icon": "media/book.svg"
+        }
+      ]
+    },
+    "views": {
+      "quranForClaudeCode": [
+        {
+          "type": "webview",
+          "id": "quranForClaudeCode.reader",
+          "name": "Quran"
+        }
+      ]
+    },
     "configuration": {
       "title": "Quran for Claude Code",
       "properties": {

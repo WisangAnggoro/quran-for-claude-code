@@ -1,0 +1,118 @@
+@font-face {
+  font-family: 'Amiri Quran';
+  src: url('fonts/AmiriQuran.ttf') format('truetype');
+  font-display: block;
+}
+
+:root {
+  --arabic-size: 28px;
+}
+
+body {
+  margin: 0;
+  padding: 8px 16px 12px;
+  color: var(--vscode-foreground);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.surah-arabic {
+  font-family: 'Amiri Quran', serif;
+  font-size: 1.4em;
+}
+
+.basmalah,
+.arabic {
+  font-family: 'Amiri Quran', serif;
+  font-size: var(--arabic-size);
+  line-height: 2.2;
+  margin: 8px 0;
+  text-align: right;
+}
+
+.basmalah {
+  text-align: center;
+  font-size: calc(var(--arabic-size) * 0.85);
+  color: var(--vscode-descriptionForeground);
+}
+
+.translation {
+  border-left: 2px solid var(--vscode-textBlockQuote-border, var(--vscode-focusBorder));
+  padding-left: 10px;
+  margin: 4px 0 12px;
+}
+
+.translation-text {
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.translation-label {
+  margin: 0;
+  font-size: 0.85em;
+  color: var(--vscode-descriptionForeground);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1;
+}
+
+button {
+  font: inherit;
+  padding: 4px 10px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+}
+
+button:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+button.secondary {
+  color: var(--vscode-button-secondaryForeground);
+  background: var(--vscode-button-secondaryBackground);
+}
+
+button.secondary:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.status {
+  color: var(--vscode-descriptionForeground);
+}
+
+.status.error {
+  color: var(--vscode-errorForeground);
+}
