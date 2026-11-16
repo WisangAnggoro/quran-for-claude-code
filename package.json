@@ -28,15 +28,17 @@
     "vscode:prepublish": "npm run typecheck && node scripts/esbuild.mjs --production",
     "lint": "eslint .",
     "build:data": "node scripts/build-data.mjs",
-    "test": "mocha \"test/**/*.test.mjs\""
+    "test": "mocha"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
     "@types/vscode": "^1.90.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
     "mocha": "^12.0.3",
+    "tsx": "^4.23.15",
     "typescript": "~6.0",
     "typescript-eslint": "^8.72.2"
   }
