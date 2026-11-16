@@ -50,10 +50,17 @@ export function parseNumberedText(text, label) {
   return { records, comments };
 }
 
-/** Extract `Version: x` from Tanzil comment lines, if present. */
+/**
+ * Identify the source revision from Tanzil comment lines.
+ * Quran text uses "(Uthmani, Version 1.1)"; translations use "Last Update: June 4, 2010".
+ */
 export function findVersion(comments) {
   for (const c of comments) {
-    const m = /^#\s*Version:\s*(.+?)\s*$/i.exec(c);
+    const m = /\bVersion[:\s]+([0-9][\w.]*)/i.exec(c);
+    if (m) return m[1];
+  }
+  for (const c of comments) {
+    const m = /^#\s*Last Update:\s*(.+?)\s*$/i.exec(c);
     if (m) return m[1];
   }
   return null;

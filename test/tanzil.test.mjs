@@ -51,6 +51,11 @@ describe('parseNumberedText', () => {
     assert.deepEqual(comments, ['#  License block', '# Version: 1.2']);
     assert.equal(findVersion(comments), '1.2');
   });
+  it('reads Tanzil Quran and translation version formats', () => {
+    assert.equal(findVersion(['#  Tanzil Quran Text (Uthmani, Version 1.1)']), '1.1');
+    assert.equal(findVersion(['#  Last Update: June 4, 2010']), 'June 4, 2010');
+    assert.equal(findVersion(['# nothing here']), null);
+  });
   it('rejects malformed lines', () => {
     assert.throws(() => parseNumberedText('1|1|ok\nnot a record', 't'), /line 2/);
   });
