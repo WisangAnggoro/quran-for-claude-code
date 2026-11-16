@@ -4,14 +4,14 @@
     "file": "quran-uthmani.txt",
     "url": "https://tanzil.net/download/",
     "options": "Quran type: Uthmani; output: Text (with aya numbers); pause marks, sajdah signs, rub-el-hizb signs: on",
-    "version": null,
-    "sha256": null
+    "version": "1.1",
+    "sha256": "4b91f9e6e8ac645d039e4ed85b3be492e795232a31cd22d668ac58238722e26f"
   },
   "metadata": {
     "file": "quran-data.xml",
     "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
     "version": null,
-    "sha256": null
+    "sha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a"
   },
   "translations": [
     {
@@ -21,8 +21,8 @@
       "translator": "Kementerian Agama RI",
       "url": "https://tanzil.net/trans/",
       "options": "Translation: Indonesian / Kementerian Agama RI; format: Text (with aya numbers)",
-      "version": null,
-      "sha256": null
+      "version": "June 4, 2010",
+      "sha256": "70428e875c50c3c42d3829654d2bd386e146f0fa68cc20c34fdd4ea3b53e21a8"
     },
     {
       "id": "en.sahih",
@@ -31,8 +31,8 @@
       "translator": "Saheeh International",
       "url": "https://tanzil.net/trans/",
       "options": "Translation: English / Saheeh International; format: Text (with aya numbers)",
-      "version": null,
-      "sha256": null
+      "version": "April 24, 2011",
+      "sha256": "a1778a1a56695d9b59ae910809ec46d9f4a55f05961de51cd56e6ebcf9040883"
     }
   ]
 }
