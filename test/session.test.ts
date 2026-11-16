@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { QuranStore } from '../src/quran/store';
-import { buildPayload, clampFontSize, resolveTranslation, type ReaderSettings } from '../src/session';
+import { buildPayload, clampFontSize, resolveTranslation, translateSelection, type ReaderSettings } from '../src/session';
 
 const dataDir = join(__dirname, '..', 'data');
 const ayat: string[] = JSON.parse(readFileSync(join(dataDir, 'quran-uthmani.json'), 'utf8')).ayat;
@@ -52,5 +52,28 @@ describe('buildPayload', () => {
     const none = await buildPayload(store, 0, { ...base, translation: 'none' });
     assert.equal(none.translation, undefined);
     assert.equal(none.translationAvailable, false);
+  });
+});
+
+describe('translateSelection', () => {
+  const indo: string[] = JSON.parse(readFileSync(join(dataDir, 'trans', 'id.indonesian.json'), 'utf8')).ayat;
+
+  it('returns the exact bundled translation with its label', async () => {
+    const r = await translateSelection(store, [261], 'en.sahih', 'en');
+    assert.deepEqual(r?.items, [{ ref: '2:255', text: sahih[261] }]);
+    assert.match(r?.label ?? '', /Saheeh International/);
+  });
+  it('dedupes, sorts, drops invalid indices and caps the count', async () => {
+    const r = await translateSelection(store, [9, 7, 7, -1, 6236, 'x', 1.5, 8, 10], 'en.sahih', 'en');
+    assert.deepEqual(r?.items.map((i) => i.ref), ['2:1', '2:2', '2:3']);
+  });
+  it('falls back to the locale default when translation is "none"', async () => {
+    const r = await translateSelection(store, [0], 'none', 'id');
+    assert.equal(r?.items[0].text, indo[0]);
+    assert.match(r?.label ?? '', /Kementerian Agama/);
+  });
+  it('returns undefined for nothing valid', async () => {
+    assert.equal(await translateSelection(store, [], 'en.sahih', 'en'), undefined);
+    assert.equal(await translateSelection(store, 'nope', 'en.sahih', 'en'), undefined);
   });
 });

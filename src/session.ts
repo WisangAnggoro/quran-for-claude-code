@@ -77,3 +77,40 @@ export async function buildPayload(store: QuranStore, index: number, settings: R
     arabicFontSize: clampFontSize(settings.arabicFontSize),
   };
 }
+
+/** Message sent to the webview for "Translate selection": `{ type: 'selectionTranslation', payload }`. */
+export interface SelectionTranslation {
+  items: { ref: string; text: string }[];
+  label: string;
+}
+
+export const MAX_SELECTION_AYAT = 3;
+
+/**
+ * Look up the bundled human translation for the ayat a selection touched. Never machine
+ * translation. Index 0 is used for the basmalah header (its translation is that of 1:1).
+ * Invalid indices are dropped; returns undefined if nothing valid remains.
+ */
+export async function translateSelection(
+  store: QuranStore,
+  indices: unknown,
+  translation: TranslationSetting,
+  locale: string,
+): Promise<SelectionTranslation | undefined> {
+  const qIndex = await store.index();
+  const valid = Array.isArray(indices)
+    ? [...new Set(indices)].filter((i): i is number => typeof i === 'number' && qIndex.isValidIndex(i))
+    : [];
+  if (valid.length === 0) return undefined;
+  const id = translation === 'none' ? resolveTranslation(undefined, false, locale) : translation;
+  if (id === 'none') return undefined;
+  const t = await store.translation(id);
+  const c = TRANSLATION_CREDITS[id];
+  return {
+    items: valid
+      .sort((a, b) => a - b)
+      .slice(0, MAX_SELECTION_AYAT)
+      .map((i) => ({ ref: qIndex.formatRef(i), text: t.ayat[i] })),
+    label: `${c.language} — ${c.translator} (translation)`,
+  };
+}
