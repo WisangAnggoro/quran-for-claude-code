@@ -24,6 +24,7 @@
     popoverItems: $('popover-items'),
     popoverLabel: $('popover-label'),
     popoverClose: $('popover-close'),
+    about: $('about'),
   };
 
   const send = (type) => vscode.postMessage({ type });
@@ -120,6 +121,7 @@
   el.mode.addEventListener('click', () => send('toggleMode'));
   el.toggleTranslation.addEventListener('click', () => send('toggleTranslation'));
   el.popoverClose.addEventListener('click', hidePopover);
+  el.about.addEventListener('click', () => send('about'));
 
   // RTL-natural keys: ← goes forward (next), → goes back (prev).
   document.addEventListener('keydown', (e) => {

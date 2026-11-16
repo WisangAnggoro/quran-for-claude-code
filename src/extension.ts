@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.window.registerWebviewViewProvider(ReaderViewProvider.viewId, provider),
     statusBar,
     claude,
-    ...registerCommands(controller, provider, store),
+    ...registerCommands(context.extensionUri, controller, provider, store),
   );
   void claude.start();
   // Delay so the offer never competes with VS Code's own startup notifications.

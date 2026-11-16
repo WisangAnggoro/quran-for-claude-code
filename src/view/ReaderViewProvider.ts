@@ -7,9 +7,17 @@ import * as vscode from 'vscode';
 import type { ReaderController } from '../controller';
 
 type Incoming =
-  | { type: 'ready' | 'next' | 'prev' | 'toggleMode' | 'toggleTranslation' }
+  | { type: 'ready' | 'next' | 'prev' | 'toggleMode' | 'toggleTranslation' | 'about' }
   | { type: 'translateSelection'; indices?: unknown };
-const INCOMING = new Set<string>(['ready', 'next', 'prev', 'toggleMode', 'toggleTranslation', 'translateSelection']);
+const INCOMING = new Set<string>([
+  'ready',
+  'next',
+  'prev',
+  'toggleMode',
+  'toggleTranslation',
+  'translateSelection',
+  'about',
+]);
 
 function isIncoming(m: unknown): m is Incoming {
   return typeof m === 'object' && m !== null && INCOMING.has((m as { type?: unknown }).type as string);
@@ -51,6 +59,9 @@ export class ReaderViewProvider implements vscode.WebviewViewProvider, vscode.Di
         return this.controller.toggleMode();
       case 'toggleTranslation':
         return this.controller.toggleTranslation();
+      case 'about':
+        await vscode.commands.executeCommand('quranForClaudeCode.about');
+        return;
       case 'translateSelection': {
         const payload = (await this.controller.translateSelection(m.indices)) ?? null;
         await this.view?.webview.postMessage({ type: 'selectionTranslation', payload });

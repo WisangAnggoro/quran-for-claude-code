@@ -1,6 +1,7 @@
-// Command Palette commands (SPEC §3). About arrives in Phase 7.
+// Command Palette commands (SPEC §3).
 
 import * as vscode from 'vscode';
+import { showAbout } from './about';
 import { installHooksCommand, uninstallHooksCommand } from './claude/hookCommands';
 import { readExtensionSettings, setEnabled } from './config';
 import type { ReaderController } from './controller';
@@ -8,6 +9,7 @@ import type { QuranStore } from './quran/store';
 import type { ReaderViewProvider } from './view/ReaderViewProvider';
 
 export function registerCommands(
+  extensionUri: vscode.Uri,
   controller: ReaderController,
   provider: ReaderViewProvider,
   store: QuranStore,
@@ -49,6 +51,7 @@ export function registerCommands(
       await show();
     }),
     reg('translateSelection', () => provider.requestTranslateSelection()),
+    reg('about', () => showAbout(extensionUri)),
     reg('installHooks', installHooksCommand),
     reg('uninstallHooks', uninstallHooksCommand),
     reg('resetBookmark', async () => {

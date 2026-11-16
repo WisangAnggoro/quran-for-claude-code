@@ -85,6 +85,11 @@
         "command": "quranForClaudeCode.uninstallHooks",
         "title": "Uninstall Claude Code Hooks",
         "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.about",
+        "title": "About & Attribution",
+        "category": "Quran"
       }
     ],
     "configuration": {
