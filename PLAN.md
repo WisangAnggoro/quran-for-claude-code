@@ -79,7 +79,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] Set version `0.1.0`; turn CHANGELOG "Unreleased" into `0.1.0`.
 - [x] First Marketplace release (0.1.0 uploaded 2026-11-16, public): upload the `.vsix` at marketplace.visualstudio.com/manage (no token needed). Azure DevOps global PATs are retired on 2026-12-01, so `vsce login` with a PAT is not used.
 - [ ] Optional: Open VSX (open-vsx.org account via GitHub, Eclipse publisher agreement, namespace `WisangJatiAnggoro`, then `npx ovsx publish` with its own token).
-- [ ] Tag `v0.1.0`, GitHub release with the `.vsix`.
+- [x] Tag `v0.1.0`, GitHub release with the `.vsix` (github.com/WisangAnggoro/quran-for-claude-code/releases/tag/v0.1.0).
 - [ ] Optional later: GitHub Actions + Marketplace Trusted Publishing (`vsce publish --oidc`) so tagged releases publish automatically.
 
 ## Open questions
