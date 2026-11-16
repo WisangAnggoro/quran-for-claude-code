@@ -176,14 +176,14 @@
         "quranForClaudeCode.navigationDirection": {
           "type": "string",
           "enum": [
-            "rtl",
-            "ltr"
+            "ltr",
+            "rtl"
           ],
           "enumDescriptions": [
-            "\"← Next\" on the left; ← key = next (follows Arabic reading direction).",
-            "\"Next →\" on the right; → key = next."
+            "\"Next →\" on the right; → key = next.",
+            "\"← Next\" on the left; ← key = next (follows Arabic reading direction)."
           ],
-          "default": "rtl",
+          "default": "ltr",
           "description": "Which side the Next button is on, and which arrow key goes to the next ayah."
         },
         "quranForClaudeCode.autoReveal": {

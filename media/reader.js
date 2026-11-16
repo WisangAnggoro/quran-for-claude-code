@@ -37,7 +37,7 @@
   }
 
   // 'rtl': ← Next on the left, ← = next. 'ltr': Next → on the right, → = next.
-  let direction = 'rtl';
+  let direction = 'ltr';
 
   function layoutNavigation(dir) {
     direction = dir === 'ltr' ? 'ltr' : 'rtl';
