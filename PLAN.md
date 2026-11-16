@@ -59,7 +59,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 ## Phase 7 — Polish & QA
 - [x] About view / command with attribution (Tanzil, translators, font, trademark notice); Tanzil credit line in the panel.
 - [x] Verify no network: bundle has no `fetch`/`XMLHttpRequest`/`http`/`net`/WebSocket; only URL is the tanzil.net attribution link.
-- [ ] Run with network disabled (manual).
+- [x] Run with network disabled: panel, translations and Claude Code hooks work offline (manual test on native Windows).
 - [x] Data load < 200 ms: first render (meta + Quran + translation) 51–90 ms in Node.
 - [ ] Activation < 50 ms: check in *Developer: Show Running Extensions* (manual).
 - [x] Accessibility: buttons have text labels; `lang="ar"` + `dir="rtl"` on Arabic; popover close has `aria-label`.
