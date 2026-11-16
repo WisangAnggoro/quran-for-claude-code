@@ -4,7 +4,7 @@
   "description": "Unofficial community extension. Not affiliated with or endorsed by Anthropic. Read the Quran while Claude Code works — totally offline.",
   "icon": "media/icon.png",
   "version": "0.0.1",
-  "publisher": "local",
+  "publisher": "WisangJatiAnggoro",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "engines": {
