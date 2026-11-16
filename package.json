@@ -42,6 +42,11 @@
     "configuration": {
       "title": "Quran for Claude Code",
       "properties": {
+        "quranForClaudeCode.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Master switch. When off, the panel is not opened automatically and Claude Code activity is ignored. You can still open the panel by hand."
+        },
         "quranForClaudeCode.mode": {
           "type": "string",
           "enum": [
@@ -81,6 +86,22 @@
           "minimum": 12,
           "maximum": 72,
           "description": "Arabic text size in pixels."
+        },
+        "quranForClaudeCode.autoReveal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Quran panel when Claude Code starts working. Never takes keyboard focus."
+        },
+        "quranForClaudeCode.advanceOnNewTurn": {
+          "type": "boolean",
+          "default": true,
+          "description": "Move to the next ayah (or a new random one) each time you send Claude Code a prompt."
+        },
+        "quranForClaudeCode.staleBusyMinutes": {
+          "type": "number",
+          "default": 30,
+          "minimum": 1,
+          "description": "Treat Claude Code as idle if it has reported 'busy' for longer than this many minutes (protects against a missed Stop event)."
         }
       }
     }
