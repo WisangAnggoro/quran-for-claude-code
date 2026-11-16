@@ -146,6 +146,8 @@ Stored in `context.globalState` (survives restarts, shared across windows):
 
 ## 9. Attribution & licensing
 
+- **MIT covers the code only** (`src/`, `media/` except fonts, `scripts/`, `test/`). Everything under `data/` and `media/fonts/` keeps its own license. `NOTICE.md` at the repo root lists each third-party component and its terms; README must say the same, so forks are not misled into treating the whole repo as MIT.
+
 - Quran text: Tanzil Project (tanzil.net) — verbatim copy, unchanged, with link back. Required notice included in `data/LICENSE-TANZIL.txt` and the About view.
 - Translations: each translator credited in UI and README; Tanzil translations are for non-commercial use — the extension is and stays free.
 - Font: KFGQPC Uthmanic Script HAFS (King Fahd Complex) or Amiri Quran (SIL OFL) — license file bundled.
