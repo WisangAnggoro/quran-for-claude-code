@@ -125,9 +125,10 @@ Stored in `context.globalState` (survives restarts, shared across windows):
 
 - Global ayah index `0 … 6235` (6,236 ayat). Conversion to/from `surah:ayah` through a bundled table of ayah counts per surah.
 - Files under `data/` (generated at build time, committed):
-  - `quran-uthmani.json` — `string[6236]`, verbatim Tanzil Uthmani text.
+  - `quran-uthmani.json` — `{ notice: string[], ayat: string[6236] }`. `ayat` is the verbatim Tanzil Uthmani text; `notice` is Tanzil's copyright block copied verbatim, because Tanzil's terms require it in every derived file.
   - `meta.json` — 114 surahs: `{ number, nameArabic, nameLatin, nameTranslation, ayahCount, startIndex, revelation }`.
-  - `trans/id.indonesian.json`, `trans/en.sahih.json` — `string[6236]`.
+  - `trans/id.indonesian.json`, `trans/en.sahih.json` — same shape `{ notice, ayat }`, with the translation's credit block as `notice`.
+  - `LICENSE-TANZIL.txt`, `trans/<id>.LICENSE.txt` — the same notice blocks as plain text.
 - Provenance: `scripts/sources.json` (committed) lists every raw source file with its download URL, Tanzil version/date and SHA-256. Raw files live in `data-src/` (git-ignored, downloaded manually). `npm run build:data` refuses to run if any file in `data-src/` does not match its recorded hash, so anyone can reproduce `data/` byte-for-byte and verify the text is unmodified.
 - Data is loaded lazily on first panel open; translation files are loaded only when selected.
 - Expected package size: < 5 MB.

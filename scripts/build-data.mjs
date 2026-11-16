@@ -88,17 +88,21 @@ function writeText(rel, lines) {
   writeFileSync(path, lines.join('\n') + '\n');
 }
 
-const outputs = [[writeJson('quran-uthmani.json', quranTexts), quranTexts]];
+// Tanzil terms: the copyright notice must be reproduced in every derived file,
+// so each generated text file carries its source's comment block verbatim.
+const outputs = [
+  [writeJson('quran-uthmani.json', { notice: quran.comments, ayat: quranTexts }), quranTexts],
+];
 writeJson('meta.json', meta);
 writeText('LICENSE-TANZIL.txt', quran.comments);
 for (const t of translations) {
-  outputs.push([writeJson(`trans/${t.entry.id}.json`, t.texts), t.texts]);
+  outputs.push([writeJson(`trans/${t.entry.id}.json`, { notice: t.parsed.comments, ayat: t.texts }), t.texts]);
   if (t.parsed.comments.length) writeText(`trans/${t.entry.id}.LICENSE.txt`, t.parsed.comments);
 }
 
 // 4. Read back: output must equal parsed source exactly.
 for (const [path, expected] of outputs) {
-  const back = JSON.parse(readFileSync(path, 'utf8'));
+  const back = JSON.parse(readFileSync(path, 'utf8')).ayat;
   if (back.length !== expected.length || back.some((s, i) => s !== expected[i])) {
     fail(`${path}: read-back does not match source text`);
   }
