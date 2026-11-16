@@ -49,10 +49,10 @@ main {
 .mode-label {
   margin-left: 6px;
   padding: 0 6px;
+  border: 1px solid var(--vscode-descriptionForeground);
   border-radius: 8px;
-  font-size: 0.85em;
-  color: var(--vscode-badge-foreground);
-  background: var(--vscode-badge-background);
+  font-size: 0.8em;
+  color: var(--vscode-descriptionForeground);
 }
 
 .heading {
