@@ -30,7 +30,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] Contribute `viewsContainers.panel` + `views` (`quranForClaudeCode.reader`, type `webview`).
 - [x] `src/view/ReaderViewProvider.ts` with strict CSP + nonce, `localResourceRoots`.
 - [x] `media/reader.html|css|js`: header (surah · ref), Arabic (RTL, bundled font), translation, Prev / Next / Mode / Translation buttons, keyboard shortcuts.
-- [x] Message protocol (`translateSelection` lands in Phase 6): webview → ext `{type: 'next'|'prev'|'toggleMode'|'toggleTranslation'|'translateSelection', text?}`; ext → webview `{type: 'render', ayah}`.
+- [x] Message protocol (incl. `translateSelection`): webview → ext `{type: 'next'|'prev'|'toggleMode'|'toggleTranslation'|'translateSelection', text?}`; ext → webview `{type: 'render', ayah}`.
 - [x] Theme via `--vscode-*` variables.
 - [ ] Manual check in light, dark and high-contrast themes.
 - **Done when:** user can open the panel and read with Prev/Next in both modes; bookmark survives reload. _(F5: panel renders 1:1 with Amiri Quran, labelled translation and controls in dark theme; still to check: basmalah header, bookmark after reload, light/high-contrast themes)_
@@ -52,9 +52,9 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** end-to-end works in VS Code on Linux/WSL and macOS. _(verified on Linux/WSL; macOS pending)_
 
 ## Phase 6 — Translate selection
-- [ ] In webview: detect selection inside ayah element; context menu via `webview/context` contribution + `data-vscode-context`; `S` key handled inside the webview (no global keybinding).
-- [ ] Map selection → ayah index(es) (`data-index` attributes) → show translation popover with translator label.
-- **Done when:** selecting Arabic text and invoking the command shows the right translation.
+- [x] In webview: detect selection inside ayah element; context menu via `webview/context` contribution + `data-vscode-context`; `S` key handled inside the webview (no global keybinding).
+- [x] Map selection → ayah index(es) (`data-index` attributes) → show translation popover with translator label.
+- **Done when:** selecting Arabic text and invoking the command shows the right translation. _(lookup unit-tested; pending F5 check)_
 
 ## Phase 7 — Polish & QA
 - [ ] About view / command with attribution (Tanzil, translators, font, trademark notice).
