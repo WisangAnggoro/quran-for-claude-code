@@ -6,7 +6,13 @@ import * as vscode from 'vscode';
 import { readSettings, SECTION, updateSetting } from './config';
 import type { QuranStore } from './quran/store';
 import { Reader, type BookmarkStore } from './reader';
-import { buildPayload, type ReaderSettings, type RenderPayload } from './session';
+import {
+  buildPayload,
+  translateSelection,
+  type ReaderSettings,
+  type RenderPayload,
+  type SelectionTranslation,
+} from './session';
 
 export class ReaderController implements vscode.Disposable {
   private settings: ReaderSettings = readSettings();
@@ -71,6 +77,11 @@ export class ReaderController implements vscode.Disposable {
     if (!this.readerP) return { mode: this.settings.mode };
     const [r, index] = await Promise.all([this.readerP, this.store.index()]);
     return { mode: this.settings.mode, bookmarkRef: index.formatRef(r.bookmark) };
+  }
+
+  /** Bundled translation for ayat the user selected in the panel (lookup only). */
+  translateSelection(indices: unknown): Promise<SelectionTranslation | undefined> {
+    return translateSelection(this.store, indices, this.settings.translation, vscode.env.language);
   }
 
   async toggleMode(): Promise<void> {

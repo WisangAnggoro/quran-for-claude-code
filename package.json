@@ -66,6 +66,11 @@
         "category": "Quran"
       },
       {
+        "command": "quranForClaudeCode.translateSelection",
+        "title": "Translate Selection",
+        "category": "Quran"
+      },
+      {
         "command": "quranForClaudeCode.resetBookmark",
         "title": "Reset Bookmark to Al-Fatihah",
         "category": "Quran"
@@ -146,6 +151,21 @@
           "description": "Treat Claude Code as idle if it has reported 'busy' for longer than this many minutes (protects against a missed Stop event)."
         }
       }
+    },
+    "menus": {
+      "webview/context": [
+        {
+          "command": "quranForClaudeCode.translateSelection",
+          "when": "webviewId == 'quranForClaudeCode.reader' && webviewSection == 'arabic'",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "quranForClaudeCode.translateSelection",
+          "when": "view.quranForClaudeCode.reader.visible"
+        }
+      ]
     }
   },
   "scripts": {

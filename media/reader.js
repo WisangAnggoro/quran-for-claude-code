@@ -20,11 +20,16 @@
     prev: $('prev'),
     mode: $('mode'),
     toggleTranslation: $('toggle-translation'),
+    popover: $('popover'),
+    popoverItems: $('popover-items'),
+    popoverLabel: $('popover-label'),
+    popoverClose: $('popover-close'),
   };
 
   const send = (type) => vscode.postMessage({ type });
 
   function render(p) {
+    hidePopover();
     document.documentElement.style.setProperty('--arabic-size', p.arabicFontSize + 'px');
 
     el.surahLatin.textContent = p.surahNameLatin + ' · ' + p.ref;
@@ -48,6 +53,49 @@
     el.reader.hidden = false;
   }
 
+  function hidePopover() {
+    el.popover.hidden = true;
+    el.popoverItems.textContent = '';
+    el.popoverLabel.textContent = '';
+  }
+
+  function showPopover(items, label) {
+    el.popoverItems.textContent = '';
+    for (const item of items) {
+      const p = document.createElement('p');
+      if (item.ref) {
+        const ref = document.createElement('span');
+        ref.className = 'ref';
+        ref.textContent = item.ref;
+        p.appendChild(ref);
+      }
+      p.appendChild(document.createTextNode(item.text));
+      el.popoverItems.appendChild(p);
+    }
+    el.popoverLabel.textContent = label || '';
+    el.popover.hidden = false;
+  }
+
+  /** Global ayah indices of the Arabic elements the current selection touches. */
+  function selectedIndices() {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || sel.toString().trim() === '') return [];
+    const out = [];
+    for (const node of [el.basmalah, el.arabic]) {
+      if (!node.hidden && sel.containsNode(node, true)) out.push(Number(node.dataset.index));
+    }
+    return out;
+  }
+
+  function translateSelection() {
+    const indices = selectedIndices();
+    if (indices.length === 0) {
+      showPopover([{ text: 'Select some Arabic text in the panel first.' }], '');
+      return;
+    }
+    vscode.postMessage({ type: 'translateSelection', indices });
+  }
+
   function showError(message) {
     el.reader.hidden = true;
     el.status.hidden = false;
@@ -60,12 +108,18 @@
     if (!m || typeof m !== 'object') return;
     if (m.type === 'render') render(m.payload);
     else if (m.type === 'error') showError(String(m.message));
+    else if (m.type === 'requestSelection') translateSelection();
+    else if (m.type === 'selectionTranslation') {
+      if (m.payload) showPopover(m.payload.items, m.payload.label);
+      else showPopover([{ text: 'No translation found for this selection.' }], '');
+    }
   });
 
   el.next.addEventListener('click', () => send('next'));
   el.prev.addEventListener('click', () => send('prev'));
   el.mode.addEventListener('click', () => send('toggleMode'));
   el.toggleTranslation.addEventListener('click', () => send('toggleTranslation'));
+  el.popoverClose.addEventListener('click', hidePopover);
 
   // RTL-natural keys: ← goes forward (next), → goes back (prev).
   document.addEventListener('keydown', (e) => {
@@ -74,7 +128,9 @@
     else if (e.key === 'ArrowRight') send('prev');
     else if (e.key === 't' || e.key === 'T') {
       if (!el.toggleTranslation.disabled) send('toggleTranslation');
-    } else return;
+    } else if (e.key === 's' || e.key === 'S') translateSelection();
+    else if (e.key === 'Escape' && !el.popover.hidden) hidePopover();
+    else return;
     e.preventDefault();
   });
 

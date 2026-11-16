@@ -1,4 +1,4 @@
-// Command Palette commands (SPEC §3). Translate-selection and About arrive in later phases.
+// Command Palette commands (SPEC §3). About arrives in Phase 7.
 
 import * as vscode from 'vscode';
 import { installHooksCommand, uninstallHooksCommand } from './claude/hookCommands';
@@ -48,6 +48,7 @@ export function registerCommands(
       await controller.goTo(r.index);
       await show();
     }),
+    reg('translateSelection', () => provider.requestTranslateSelection()),
     reg('installHooks', installHooksCommand),
     reg('uninstallHooks', uninstallHooksCommand),
     reg('resetBookmark', async () => {

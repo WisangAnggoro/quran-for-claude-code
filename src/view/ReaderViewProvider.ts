@@ -6,8 +6,10 @@ import { readFile } from 'node:fs/promises';
 import * as vscode from 'vscode';
 import type { ReaderController } from '../controller';
 
-type Incoming = { type: 'ready' | 'next' | 'prev' | 'toggleMode' | 'toggleTranslation' };
-const INCOMING = new Set<string>(['ready', 'next', 'prev', 'toggleMode', 'toggleTranslation']);
+type Incoming =
+  | { type: 'ready' | 'next' | 'prev' | 'toggleMode' | 'toggleTranslation' }
+  | { type: 'translateSelection'; indices?: unknown };
+const INCOMING = new Set<string>(['ready', 'next', 'prev', 'toggleMode', 'toggleTranslation', 'translateSelection']);
 
 function isIncoming(m: unknown): m is Incoming {
   return typeof m === 'object' && m !== null && INCOMING.has((m as { type?: unknown }).type as string);
@@ -49,7 +51,21 @@ export class ReaderViewProvider implements vscode.WebviewViewProvider, vscode.Di
         return this.controller.toggleMode();
       case 'toggleTranslation':
         return this.controller.toggleTranslation();
+      case 'translateSelection': {
+        const payload = (await this.controller.translateSelection(m.indices)) ?? null;
+        await this.view?.webview.postMessage({ type: 'selectionTranslation', payload });
+        return;
+      }
     }
+  }
+
+  /** Ask the webview for its current selection (from the context menu or palette command). */
+  async requestTranslateSelection(): Promise<void> {
+    if (!this.view) {
+      void vscode.window.showInformationMessage('Open the Quran panel and select Arabic text first.');
+      return;
+    }
+    await this.view.webview.postMessage({ type: 'requestSelection' });
   }
 
   /**

@@ -109,6 +109,45 @@ button:disabled {
   cursor: default;
 }
 
+.popover {
+  position: relative;
+  margin: 0 0 12px;
+  padding: 8px 32px 8px 12px;
+  color: var(--vscode-editorHoverWidget-foreground, var(--vscode-foreground));
+  background: var(--vscode-editorHoverWidget-background);
+  border: 1px solid var(--vscode-editorHoverWidget-border, var(--vscode-focusBorder));
+  border-radius: 3px;
+}
+
+.popover p {
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.popover .ref {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.popover-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 0 6px;
+  color: var(--vscode-foreground);
+  background: transparent;
+}
+
+.popover-close:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+
+.hint {
+  width: 100%;
+  font-size: 0.85em;
+  color: var(--vscode-descriptionForeground);
+}
+
 .status {
   color: var(--vscode-descriptionForeground);
 }
