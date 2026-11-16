@@ -3,30 +3,66 @@
 
 export const HOOK_TAG = 'quran-for-claude-code';
 
-function stateCommand(activity: 'busy' | 'idle'): string {
-  return (
-    `d="$HOME/.quran-for-claude-code"; mkdir -p "$d" && ` +
-    `printf '${activity} %s' "$(date +%s)" > "$d/state.tmp" && mv -f "$d/state.tmp" "$d/state" # ${HOOK_TAG}`
-  );
+/**
+ * How the hook command is written:
+ * - posix: macOS, Linux, WSL (`sh -c`), state under $HOME.
+ * - gitbash: native Windows with Git Bash (Claude Code's default there), state under %USERPROFILE%.
+ * - powershell: native Windows via PowerShell (`"shell": "powershell"`), state under %USERPROFILE%.
+ * On Windows both variants anchor to %USERPROFILE% because $HOME in Git Bash may differ.
+ */
+export type HookVariant = 'posix' | 'gitbash' | 'powershell';
+export const HOOK_VARIANTS: readonly HookVariant[] = ['posix', 'gitbash', 'powershell'];
+
+type Activity = 'busy' | 'idle';
+
+export function hookCommand(variant: HookVariant, activity: Activity): string {
+  switch (variant) {
+    case 'posix':
+      return (
+        `d="$HOME/.quran-for-claude-code"; mkdir -p "$d" && ` +
+        `printf '${activity} %s' "$(date +%s)" > "$d/state.tmp" && mv -f "$d/state.tmp" "$d/state" # ${HOOK_TAG}`
+      );
+    case 'gitbash':
+      return (
+        `d="$(cygpath -u "$USERPROFILE")/.quran-for-claude-code"; mkdir -p "$d" && ` +
+        `printf '${activity} %s' "$(date +%s)" > "$d/state.tmp" && mv -f "$d/state.tmp" "$d/state" # ${HOOK_TAG}`
+      );
+    case 'powershell':
+      return (
+        `$d = Join-Path $env:USERPROFILE '.quran-for-claude-code'; ` +
+        `[void](New-Item -ItemType Directory -Force -Path $d); ` +
+        `$t = Join-Path $d 'state.tmp'; ` +
+        `[IO.File]::WriteAllText($t, '${activity} ' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()); ` +
+        `Move-Item -LiteralPath $t -Destination (Join-Path $d 'state') -Force # ${HOOK_TAG}`
+      );
+  }
 }
 
-export const BUSY_COMMAND = stateCommand('busy');
-export const IDLE_COMMAND = stateCommand('idle');
+export const BUSY_COMMAND = hookCommand('posix', 'busy');
+export const IDLE_COMMAND = hookCommand('posix', 'idle');
 
-/** Claude Code hook events we register, and the command each runs. */
-export const OUR_HOOKS: Readonly<Record<string, string>> = {
-  UserPromptSubmit: BUSY_COMMAND,
-  Stop: IDLE_COMMAND,
-  SessionEnd: IDLE_COMMAND,
+/** Claude Code hook events we register, and whether each marks Claude busy or idle. */
+export const HOOK_EVENTS: Readonly<Record<string, Activity>> = {
+  UserPromptSubmit: 'busy',
+  Stop: 'idle',
+  SessionEnd: 'idle',
 };
+
+export interface CommandHook {
+  type: 'command';
+  command: string;
+  shell?: 'powershell';
+}
+
+export function hookEntry(variant: HookVariant, activity: Activity): CommandHook {
+  const entry: CommandHook = { type: 'command', command: hookCommand(variant, activity) };
+  if (variant === 'powershell') entry.shell = 'powershell';
+  return entry;
+}
 
 export class HookConfigError extends Error {}
 
 type Json = Record<string, unknown>;
-interface HookEntry {
-  type?: unknown;
-  command?: unknown;
-}
 interface HookGroup {
   matcher?: unknown;
   hooks?: unknown;
@@ -60,12 +96,25 @@ function groupsOf(hooks: Json | undefined, event: string): HookGroup[] {
   return (hooks?.[event] as HookGroup[] | undefined) ?? [];
 }
 
-/** True when every one of our hooks is present with the current command. */
-export function hooksInstalled(settings: unknown): boolean {
+function sameEntry(entry: unknown, expected: CommandHook): boolean {
+  if (!isObject(entry)) return false;
+  return entry.type === expected.type && entry.command === expected.command && entry.shell === expected.shell;
+}
+
+/** Which variant is fully installed with the current commands, if any. */
+export function installedVariant(settings: unknown): HookVariant | undefined {
   const hooks = hooksObject(settings);
-  return Object.entries(OUR_HOOKS).every(([event, command]) =>
-    groupsOf(hooks, event).some((g) => (g.hooks as HookEntry[]).some((h) => isOurs(h) && h.command === command)),
+  return HOOK_VARIANTS.find((variant) =>
+    Object.entries(HOOK_EVENTS).every(([event, activity]) =>
+      groupsOf(hooks, event).some((g) => (g.hooks as unknown[]).some((h) => sameEntry(h, hookEntry(variant, activity)))),
+    ),
   );
+}
+
+/** True when our hooks are installed (in the given variant, or any variant). */
+export function hooksInstalled(settings: unknown, variant?: HookVariant): boolean {
+  const found = installedVariant(settings);
+  return variant ? found === variant : found !== undefined;
 }
 
 export interface MergeResult {
@@ -74,18 +123,35 @@ export interface MergeResult {
 }
 
 /**
- * Add our hooks (or update an older version of them). Returns a new object; the input
- * is not mutated. Idempotent: installing twice reports `changed: false`.
+ * Add our hooks in the given variant, replacing any older version or other variant of
+ * ours. Returns a new object; the input is not mutated. Idempotent per variant.
  */
-export function installHooks(settings: unknown): MergeResult {
-  if (hooksInstalled(settings)) return { settings: structuredClone(settings as Json), changed: false };
+export function installHooks(settings: unknown, variant: HookVariant = 'posix'): MergeResult {
+  if (hooksInstalled(settings, variant) && !hasStrayEntries(settings, variant)) {
+    return { settings: structuredClone(settings as Json), changed: false };
+  }
   const next = removeOurs(structuredClone(settings as Json));
   const hooks = (next.hooks ??= {}) as Json;
-  for (const [event, command] of Object.entries(OUR_HOOKS)) {
+  for (const [event, activity] of Object.entries(HOOK_EVENTS)) {
     const groups = (hooks[event] ??= []) as HookGroup[];
-    groups.push({ hooks: [{ type: 'command', command }] });
+    groups.push({ hooks: [hookEntry(variant, activity)] });
   }
   return { settings: next, changed: true };
+}
+
+/** Any tagged entry that is not part of the given variant (e.g. a leftover other variant). */
+function hasStrayEntries(settings: unknown, variant: HookVariant): boolean {
+  const hooks = hooksObject(settings);
+  if (!hooks) return false;
+  return Object.entries(hooks).some(([event, groups]) =>
+    (groups as HookGroup[]).some((g) =>
+      (g.hooks as unknown[]).some((h) => {
+        if (!isOurs(h)) return false;
+        const activity = HOOK_EVENTS[event];
+        return !activity || !sameEntry(h, hookEntry(variant, activity));
+      }),
+    ),
+  );
 }
 
 /** Remove only our entries, cleaning up containers that become empty because of it. */

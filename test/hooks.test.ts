@@ -2,9 +2,13 @@ import assert from 'node:assert/strict';
 import {
   BUSY_COMMAND,
   HOOK_TAG,
+  HOOK_VARIANTS,
   HookConfigError,
   IDLE_COMMAND,
+  hookCommand,
+  hookEntry,
   hooksInstalled,
+  installedVariant,
   installHooks,
   uninstallHooks,
 } from '../src/claude/hooks';
@@ -110,5 +114,54 @@ describe('uninstallHooks', () => {
     const r = uninstallHooks(realistic());
     assert.equal(r.changed, false);
     assert.deepEqual(r.settings, realistic());
+  });
+});
+
+describe('hook variants', () => {
+  it('every variant is tagged and writes busy/idle', () => {
+    for (const v of HOOK_VARIANTS) {
+      for (const a of ['busy', 'idle'] as const) {
+        const c = hookCommand(v, a);
+        assert.ok(c.endsWith(`# ${HOOK_TAG}`), `${v} ${a}`);
+        assert.ok(c.includes(`'${a} `), `${v} ${a}`);
+      }
+    }
+  });
+  it('posix is unchanged so existing installs still count as installed', () => {
+    assert.equal(hookCommand('posix', 'busy'), BUSY_COMMAND);
+    assert.match(BUSY_COMMAND, /^d="\$HOME\/\.quran-for-claude-code"/);
+  });
+  it('Windows variants anchor to USERPROFILE', () => {
+    assert.match(hookCommand('gitbash', 'busy'), /^d="\$\(cygpath -u "\$USERPROFILE"\)\/\.quran-for-claude-code"/);
+    assert.match(hookCommand('powershell', 'busy'), /^\$d = Join-Path \$env:USERPROFILE '\.quran-for-claude-code'/);
+  });
+  it('only the PowerShell entry sets "shell"', () => {
+    assert.equal(hookEntry('posix', 'busy').shell, undefined);
+    assert.equal(hookEntry('gitbash', 'busy').shell, undefined);
+    assert.equal(hookEntry('powershell', 'busy').shell, 'powershell');
+  });
+  it('installs each variant and reports which one is installed', () => {
+    for (const v of HOOK_VARIANTS) {
+      const s = installHooks(realistic(), v).settings;
+      assert.equal(installedVariant(s), v);
+      assert.equal(hooksInstalled(s, v), true);
+      assert.equal(installHooks(s, v).changed, false, `${v} idempotent`);
+    }
+  });
+  it('switching variants replaces ours and keeps theirs', () => {
+    const posixInstalled = installHooks(realistic(), 'posix').settings;
+    const { settings, changed } = installHooks(posixInstalled, 'powershell');
+    assert.equal(changed, true);
+    assert.equal(installedVariant(settings), 'powershell');
+    const s = settings as { hooks: Record<string, { hooks: { command: string }[] }[]> };
+    const ours = Object.values(s.hooks).flat().flatMap((g) => g.hooks).filter((h) => h.command.includes(HOOK_TAG));
+    assert.equal(ours.length, 3);
+    assert.deepEqual(uninstallHooks(settings).settings, realistic());
+  });
+  it('repairs a mix of variants', () => {
+    const mixed = installHooks({}, 'gitbash').settings as { hooks: Record<string, unknown[]> };
+    mixed.hooks.Stop.push({ hooks: [hookEntry('powershell', 'idle')] });
+    assert.equal(installHooks(mixed, 'gitbash').changed, true);
+    assert.equal(installedVariant(installHooks(mixed, 'gitbash').settings), 'gitbash');
   });
 });

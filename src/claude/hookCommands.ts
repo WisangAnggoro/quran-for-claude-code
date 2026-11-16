@@ -1,21 +1,63 @@
 // "Install/Uninstall Claude Code Hooks" commands and the one-time offer to install.
 // Every write to settings.json is preceded by an explicit modal confirmation (AGENTS.md rule 3).
 
+import { existsSync } from 'node:fs';
 import * as vscode from 'vscode';
-import { HookConfigError, hooksInstalled, installHooks, OUR_HOOKS, uninstallHooks } from './hooks';
+import {
+  HOOK_EVENTS,
+  HookConfigError,
+  hooksInstalled,
+  installHooks,
+  uninstallHooks,
+  type HookVariant,
+} from './hooks';
 import { applyToSettingsFile, claudeSettingsPath, readSettingsFile } from './settingsFile';
+import { findGitBash } from './windows';
 
 const PROMPT_DISMISSED_KEY = 'hooksPromptDismissed';
 
-function describeHooks(): string {
-  const busy = Object.entries(OUR_HOOKS).filter(([, c]) => c.includes("'busy")).map(([e]) => e);
-  const idle = Object.entries(OUR_HOOKS).filter(([, c]) => c.includes("'idle")).map(([e]) => e);
+const SHELL_NAMES: Record<HookVariant, string> = {
+  posix: 'sh',
+  gitbash: 'Git Bash',
+  powershell: 'PowerShell',
+};
+
+function describeHooks(variant: HookVariant): string {
+  const events = (a: string) => Object.keys(HOOK_EVENTS).filter((e) => HOOK_EVENTS[e] === a).join(', ');
+  const file = variant === 'posix' ? '~/.quran-for-claude-code/state' : '%USERPROFILE%\\.quran-for-claude-code\\state';
   return (
-    `• ${busy.join(', ')} → writes "busy <time>" to ~/.quran-for-claude-code/state\n` +
-    `• ${idle.join(', ')} → writes "idle <time>" to the same file\n\n` +
+    `• ${events('busy')} → writes "busy <time>" to ${file}\n` +
+    `• ${events('idle')} → writes "idle <time>" to the same file\n\n` +
+    `Each command is one line run by ${SHELL_NAMES[variant]}. ` +
     'Nothing else is run and nothing leaves your machine. Your existing settings and hooks are kept, ' +
     'and a backup of settings.json is saved next to it before any change.'
   );
+}
+
+/**
+ * Pick the hook variant. Only native Windows has a choice: Git Bash (Claude Code's default
+ * when Git for Windows is installed) or PowerShell (always available; set explicitly per hook).
+ */
+async function chooseVariant(): Promise<HookVariant | undefined> {
+  if (process.platform !== 'win32') return 'posix';
+  const gitBash = findGitBash(process.env, existsSync);
+  type Item = vscode.QuickPickItem & { variant: HookVariant };
+  const bash: Item = {
+    variant: 'gitbash',
+    label: 'Git Bash',
+    description: gitBash ? `found: ${gitBash}` : 'not found',
+    detail: "Claude Code's default shell on Windows when Git for Windows is installed.",
+  };
+  const ps: Item = {
+    variant: 'powershell',
+    label: 'PowerShell',
+    description: gitBash ? undefined : 'recommended: Git Bash was not found',
+    detail: 'Works without Git Bash. Needs a Claude Code version that supports the hook "shell" setting.',
+  };
+  const pick = await vscode.window.showQuickPick(gitBash ? [bash, ps] : [ps, bash], {
+    title: 'Quran: Which shell should Claude Code use for the hooks?',
+  });
+  return pick?.variant;
 }
 
 async function report(err: unknown): Promise<void> {
@@ -24,17 +66,19 @@ async function report(err: unknown): Promise<void> {
 }
 
 export async function installHooksCommand(): Promise<void> {
+  const variant = await chooseVariant();
+  if (!variant) return;
   const path = claudeSettingsPath();
   const ok = await vscode.window.showInformationMessage(
     'Install Quran for Claude Code hooks?',
-    { modal: true, detail: `This adds 3 hooks to ${path}:\n\n${describeHooks()}` },
+    { modal: true, detail: `This adds 3 hooks to ${path}:\n\n${describeHooks(variant)}` },
     'Install',
   );
   if (ok !== 'Install') return;
   try {
-    const r = await applyToSettingsFile(path, installHooks);
+    const r = await applyToSettingsFile(path, (s) => installHooks(s, variant));
     if (!r.changed) {
-      void vscode.window.showInformationMessage('Quran hooks are already installed.');
+      void vscode.window.showInformationMessage(`Quran hooks (${SHELL_NAMES[variant]}) are already installed.`);
       return;
     }
     const backup = r.backup ? ` Backup: ${r.backup}` : '';
