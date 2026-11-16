@@ -8,7 +8,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] TypeScript (`strict`), esbuild bundle script, ESLint.
 - [x] `src/extension.ts` with `activate`/`deactivate`; activation on `onStartupFinished` + view/command events.
 - [x] `.vscode/launch.json` for F5 Extension Development Host.
-- **Done when:** F5 launches and the extension activates with no errors. _(build, typecheck and lint verified; F5 check pending manual run)_
+- **Done when:** F5 launches and the extension activates with no errors. ✅ (verified with F5)
 
 ## Phase 1 — Data pipeline
 - [x] Download (manually, once) into `data-src/` (git-ignored): Tanzil `quran-uthmani.txt` (with ayah numbers), `quran-data.xml` (surah metadata), translations `id.indonesian.txt`, `en.sahih.txt`.
@@ -33,7 +33,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] Message protocol (`translateSelection` lands in Phase 6): webview → ext `{type: 'next'|'prev'|'toggleMode'|'toggleTranslation'|'translateSelection', text?}`; ext → webview `{type: 'render', ayah}`.
 - [x] Theme via `--vscode-*` variables.
 - [ ] Manual check in light, dark and high-contrast themes.
-- **Done when:** user can open the panel and read with Prev/Next in both modes; bookmark survives reload. _(built and unit-tested; pending manual F5 check)_
+- **Done when:** user can open the panel and read with Prev/Next in both modes; bookmark survives reload. _(F5: panel renders 1:1 with Amiri Quran, labelled translation and controls in dark theme; still to check: basmalah header, bookmark after reload, light/high-contrast themes)_
 
 ## Phase 4 — Status bar, commands, settings
 - [ ] Status bar item with on/off, tooltip, busy spinner.
