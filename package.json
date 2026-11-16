@@ -72,7 +72,7 @@
         "command": "quranForClaudeCode.useContinuousMode",
         "title": "Switch to Continuous Mode",
         "category": "Quran",
-        "icon": "$(shuffle)"
+        "icon": "$(list-unordered)"
       },
       {
         "command": "quranForClaudeCode.showTranslation",
