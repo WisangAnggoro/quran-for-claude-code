@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-16
+
+First release.
+
 ### Added
 - Project scaffold: strict TypeScript, esbuild bundle, ESLint with rules that forbid network APIs, F5 launch config.
 - `npm run build:data`: parses Tanzil sources into `data/`, pins each source by SHA-256, checks 6,236 ayat against surah metadata, and verifies every ayah round-trips byte-for-byte.
