@@ -54,13 +54,21 @@ export class ReaderViewProvider implements vscode.WebviewViewProvider, vscode.Di
 
   /**
    * Show the panel without taking keyboard focus (AGENTS.md rule 4).
-   * Returns false if VS Code has not created the view yet (panel never opened this session);
-   * there is no API to create it without focusing it.
+   * If VS Code has not created the view yet, use the workbench's per-view `<id>.open`
+   * command with `preserveFocus`, which opens it unfocused. Never falls back to `.focus`.
+   * @returns false if the panel could not be shown (e.g. command missing on an old VS Code).
    */
-  reveal(): boolean {
-    if (!this.view) return false;
-    this.view.show(true);
-    return true;
+  async reveal(): Promise<boolean> {
+    if (this.view) {
+      this.view.show(true);
+      return true;
+    }
+    try {
+      await vscode.commands.executeCommand(`${ReaderViewProvider.viewId}.open`, { preserveFocus: true });
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async render(): Promise<void> {

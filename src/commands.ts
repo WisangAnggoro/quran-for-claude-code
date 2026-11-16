@@ -4,20 +4,16 @@ import * as vscode from 'vscode';
 import { readExtensionSettings, setEnabled } from './config';
 import type { ReaderController } from './controller';
 import type { QuranStore } from './quran/store';
-import { ReaderViewProvider } from './view/ReaderViewProvider';
+import type { ReaderViewProvider } from './view/ReaderViewProvider';
 
 export function registerCommands(
   controller: ReaderController,
   provider: ReaderViewProvider,
   store: QuranStore,
 ): vscode.Disposable[] {
-  /**
-   * Bring the panel into view for a command the user just ran. If VS Code has not created
-   * the view yet, the only API that creates it is the view's focus command, so the first
-   * explicit command of a session focuses the panel. Automatic reveals never do this.
-   */
+  /** Bring the panel into view without taking focus. */
   async function show(): Promise<void> {
-    if (!provider.reveal()) await vscode.commands.executeCommand(`${ReaderViewProvider.viewId}.focus`);
+    await provider.reveal();
   }
 
   const reg = (id: string, fn: () => unknown) => vscode.commands.registerCommand(`quranForClaudeCode.${id}`, fn);
