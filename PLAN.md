@@ -48,8 +48,8 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] `src/claude/hooks.ts`: read/merge/backup `~/.claude/settings.json`; idempotent install; uninstall only tagged entries. Tolerate missing file / invalid JSON (abort with message, never clobber).
 - [x] Unit tests for merge/uninstall on fixtures (empty, existing hooks, already installed, malformed).
 - [x] First-run info message offering hook install (dismissable forever).
-- [ ] Manual test with real Claude Code: prompt → panel shows ayah; Stop → spinner stops.
-- **Done when:** end-to-end works in VS Code on Linux/WSL and macOS. _(unit-tested; hook commands verified under `sh` with a temp HOME; real Claude Code run pending)_
+- [x] Manual test with real Claude Code (WSL, VS Code 1.146): install kept existing hooks and wrote a backup (`settings.json` == backup + our 3 hooks, verified); prompt wrote `busy`; status bar spinner shows while Claude works and stops after Stop.
+- **Done when:** end-to-end works in VS Code on Linux/WSL and macOS. _(verified on Linux/WSL; macOS pending)_
 
 ## Phase 6 — Translate selection
 - [ ] In webview: detect selection inside ayah element; context menu via `webview/context` contribution + `data-vscode-context`; `S` key handled inside the webview (no global keybinding).
