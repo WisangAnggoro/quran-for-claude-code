@@ -56,6 +56,27 @@ export class ReaderController implements vscode.Disposable {
     this.changed.fire();
   }
 
+  async goTo(index: number): Promise<void> {
+    (await this.reader()).goTo(index);
+    this.changed.fire();
+  }
+
+  async resetBookmark(): Promise<void> {
+    (await this.reader()).resetBookmark();
+    this.changed.fire();
+  }
+
+  /** Mode and bookmark for the status bar. The bookmark ref is only known once data is loaded. */
+  async describe(): Promise<{ mode: ReaderSettings['mode']; bookmarkRef?: string }> {
+    if (!this.readerP) return { mode: this.settings.mode };
+    const [r, index] = await Promise.all([this.readerP, this.store.index()]);
+    return { mode: this.settings.mode, bookmarkRef: index.formatRef(r.bookmark) };
+  }
+
+  get isLoaded(): boolean {
+    return this.readerP !== undefined;
+  }
+
   async toggleMode(): Promise<void> {
     await updateSetting('mode', this.settings.mode === 'continuous' ? 'random' : 'continuous');
   }
