@@ -36,11 +36,11 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** user can open the panel and read with Prev/Next in both modes; bookmark survives reload. _(F5: panel renders 1:1 with Amiri Quran, labelled translation and controls in dark theme; still to check: basmalah header, bookmark after reload, light/high-contrast themes)_
 
 ## Phase 4 — Status bar, commands, settings
-- [ ] Status bar item with on/off, tooltip, busy spinner.
-- [ ] All commands from SPEC §3 and settings from SPEC §4 in `package.json`.
-- [ ] React to `onDidChangeConfiguration`.
-- [ ] `Go to Ayah…` quick input.
-- **Done when:** every command works from the Command Palette.
+- [x] Status bar item with on/off, tooltip, busy spinner (`setBusy` ready; driven by Phase 5).
+- [x] All settings from SPEC §4; commands toggle, next, prev, toggleMode, goTo, resetBookmark. (translateSelection → Phase 6, install/uninstallHooks → Phase 5, about → Phase 7.)
+- [x] React to `onDidChangeConfiguration`.
+- [x] `Go to Ayah…` quick input with live validation.
+- **Done when:** every command works from the Command Palette. _(pending F5 check)_
 
 ## Phase 5 — Claude Code integration
 - [ ] `src/claude/stateWatcher.ts`: watch `~/.quran-for-claude-code/state`, parse, stale check, emit `busy`/`idle` events (debounced).
@@ -78,3 +78,4 @@ Each phase ends in a working, testable state. Check items off as they land.
 4. ~~**Font choice:** KFGQPC HAFS vs Amiri Quran.~~ Decided: Amiri Quran 1.003 (OFL), full code-point coverage verified.
 5. **Default translation:** confirm Indonesian (Kemenag) + English (Saheeh International) as the v1 pair.
 6. ~~**Basmalah in ayah 1:**~~ Decided: display-only split into a header line (`src/quran/display.ts`). Matches on letters ignoring diacritics (95:1 and 97:1 spell it with an extra shadda); shown text keeps the source marks and always re-joins to the exact stored ayah (tested for all 112 surahs).
+7. **Revealing a never-opened panel:** `WebviewView.show(preserveFocus)` only works after VS Code has created the view. Before that, the only way to create it is the view's `.focus` command, which takes focus. Current behaviour: explicit palette commands (Next/Prev/Go to) fall back to `.focus`; automatic reveal must never do that. Phase 5 needs a focus-free way to open the panel the first time (or accept that auto-reveal only works once the panel has been opened in the session).
