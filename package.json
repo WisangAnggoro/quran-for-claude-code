@@ -6,6 +6,14 @@
   "version": "0.0.1",
   "publisher": "WisangJatiAnggoro",
   "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WisangAnggoro/quran-for-claude-code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WisangAnggoro/quran-for-claude-code/issues"
+  },
+  "homepage": "https://github.com/WisangAnggoro/quran-for-claude-code#readme",
   "private": true,
   "engines": {
     "vscode": "^1.90.0"
@@ -297,7 +305,7 @@
     "build:data": "node scripts/build-data.mjs",
     "test": "mocha",
     "build:icon": "node scripts/build-icon.mjs",
-    "package": "vsce package --allow-missing-repository --no-rewrite-relative-links"
+    "package": "vsce package"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
