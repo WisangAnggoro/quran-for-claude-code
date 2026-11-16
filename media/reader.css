@@ -142,12 +142,6 @@ button:disabled {
   background: var(--vscode-toolbar-hoverBackground);
 }
 
-.hint {
-  width: 100%;
-  font-size: 0.85em;
-  color: var(--vscode-descriptionForeground);
-}
-
 .credit {
   margin-top: 10px;
   font-size: 0.85em;
