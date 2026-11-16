@@ -61,9 +61,9 @@ Version: 0.1 (v1 scope) · Status: draft
 - Bundled translations (v1):
   - `id.indonesian` — Bahasa Indonesia, Kementerian Agama RI (via Tanzil)
   - `en.sahih` — English, Saheeh International (via Tanzil)
-- Setting `translation` chooses one (`id.indonesian` | `en.sahih` | `none`).
+- Setting `translation` chooses one (`id.indonesian` | `en.sahih` | `none`); default `en.sahih` for everyone. The panel has a button showing the current translation (e.g. `English ▾`) that opens a quick pick, also available as **Quran: Choose Translation…**.
 - **Show translation** setting decides whether the translation is visible by default.
-- **Translate selection**: when the user selects any Arabic text inside the panel and either right-clicks → *Translate selection* or presses `S` (panel focused; `Ctrl/Cmd+Shift+T` is avoided because it is VS Code's *Reopen Closed Editor*), a popover shows the full translation of the ayah(s) containing the selection, labelled with translator name. This is a lookup, never machine translation. Selecting the basmalah header shows the translation of 1:1 (Tanzil's translation of ayah 1 of other surahs does not include it). If `translation` is `none`, the locale default is used for the popover. At most 3 ayat are shown.
+- **Translate selection**: when the user selects any Arabic text inside the panel and either right-clicks → *Translate selection* or presses `S` (panel focused; `Ctrl/Cmd+Shift+T` is avoided because it is VS Code's *Reopen Closed Editor*), a popover shows the full translation of the ayah(s) containing the selection, labelled with translator name. This is a lookup, never machine translation. Selecting the basmalah header shows the translation of 1:1 (Tanzil's translation of ayah 1 of other surahs does not include it). If `translation` is `none`, English (Saheeh International) is used for the popover. At most 3 ayat are shown.
 - Command `Quran: Go to Ayah…` accepts `2:255` or `al-baqarah 255` input.
 
 ### F6. Hook installer
@@ -113,7 +113,7 @@ Version: 0.1 (v1 scope) · Status: draft
 |---|---|---|---|
 | `quranForClaudeCode.enabled` | boolean | `true` | Master on/off |
 | `quranForClaudeCode.mode` | `continuous` \| `random` | `continuous` | |
-| `quranForClaudeCode.translation` | `id.indonesian` \| `en.sahih` \| `none` | `en.sahih` (auto `id.indonesian` if VS Code locale is `id`) | |
+| `quranForClaudeCode.translation` | `id.indonesian` \| `en.sahih` \| `none` | `en.sahih` | Same default for everyone. Switch from the panel's translation button or **Quran: Choose Translation…**. |
 | `quranForClaudeCode.showTranslation` | boolean | `true` | |
 | `quranForClaudeCode.autoReveal` | boolean | `true` | Reveal panel when Claude starts |
 | `quranForClaudeCode.advanceOnNewTurn` | boolean | `true` | |

@@ -12,7 +12,7 @@ Everything is bundled. The extension never connects to the internet.
 - **Continuous mode** (default): picks up exactly where you left off, across sessions and windows. Wraps from An-Nas back to Al-Fatihah.
 - **Random mode**: a random ayah each time, with Prev to go back through the last 50. Never moves your continuous bookmark.
 - **Shows up while Claude Code works**: opens without stealing focus and moves to the next ayah on each prompt. A spinner appears in the status bar while Claude is busy.
-- **Translations**: Bahasa Indonesia (Kementerian Agama RI) and English (Saheeh International). Indonesian is the default when VS Code's display language is Indonesian.
+- **Translations**: English (Saheeh International, the default) and Bahasa Indonesia (Kementerian Agama RI). Switch with the translation button in the panel (`English ▾`) or **Quran: Choose Translation…**.
 - **Translate selection**: select Arabic text in the panel and press `S` (or right-click → *Translate Selection*) to see the translation of that ayah. This looks up the bundled human translation; nothing is machine-translated.
 - **Go to Ayah**: type `2:255`, `al-baqarah 255` or `yasin`.
 
@@ -58,6 +58,7 @@ All commands start with **Quran:** in the Command Palette.
 | Switch Mode (Random/Continuous) | |
 | Go to Ayah… | Jump to `2:255`, `al-baqarah 255`, `yasin`, … |
 | Translate Selection | Translation of the selected Arabic text |
+| Choose Translation… | English, Bahasa Indonesia, or none |
 | Reset Bookmark to Al-Fatihah | Asks first |
 | Install / Uninstall Claude Code Hooks | See above |
 | About & Attribution | Credits and licenses |
@@ -68,7 +69,7 @@ All commands start with **Quran:** in the Command Palette.
 |---|---|---|
 | `quranForClaudeCode.enabled` | `true` | Master switch. When off, Claude Code activity is ignored. |
 | `quranForClaudeCode.mode` | `continuous` | `continuous` or `random` |
-| `quranForClaudeCode.translation` | `en.sahih` | `id.indonesian`, `en.sahih` or `none`. If you never set it, Indonesian is used for an Indonesian VS Code UI. |
+| `quranForClaudeCode.translation` | `en.sahih` | `id.indonesian`, `en.sahih` or `none` |
 | `quranForClaudeCode.showTranslation` | `true` | Show the translation by default |
 | `quranForClaudeCode.autoReveal` | `true` | Open the panel when Claude Code starts working (never takes focus) |
 | `quranForClaudeCode.advanceOnNewTurn` | `true` | Move to the next ayah on each prompt |
