@@ -41,8 +41,8 @@ On macOS, Linux and WSL the hooks run in `sh`. On native Windows, the install co
 
 | Key | Action |
 |---|---|
-| `←` | Next ayah (right-to-left reading direction; `→` if `navigationDirection` is `ltr`) |
-| `→` | Previous ayah (`←` if `navigationDirection` is `ltr`) |
+| `→` | Next ayah (`←` if `navigationDirection` is `rtl`) |
+| `←` | Previous ayah (`→` if `navigationDirection` is `rtl`) |
 | `T` | Show/hide translation |
 | `S` | Translate the selected Arabic text |
 | `Esc` | Close the translation popover |
@@ -74,7 +74,7 @@ All commands start with **Quran:** in the Command Palette.
 | `quranForClaudeCode.autoReveal` | `true` | Open the panel when Claude Code starts working (never takes focus) |
 | `quranForClaudeCode.advanceOnNewTurn` | `true` | Move to the next ayah on each prompt |
 | `quranForClaudeCode.arabicFontSize` | `28` | Arabic text size in pixels (12–72) |
-| `quranForClaudeCode.navigationDirection` | `rtl` | `rtl`: `← Next` on the left, ← key moves forward. `ltr`: `Next →` on the right, → key moves forward. |
+| `quranForClaudeCode.navigationDirection` | `ltr` | `ltr`: `Next →` on the right, → key moves forward. `rtl`: `← Next` on the left, ← key moves forward (follows the Arabic reading direction). |
 | `quranForClaudeCode.staleBusyMinutes` | `30` | Treat Claude Code as idle after this long without a Stop event |
 
 ## Privacy
