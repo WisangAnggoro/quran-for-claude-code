@@ -27,12 +27,13 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** tests pass. ✅
 
 ## Phase 3 — Webview panel
-- [ ] Contribute `viewsContainers.panel` + `views` (`quranForClaudeCode.reader`, type `webview`).
-- [ ] `src/view/ReaderViewProvider.ts` with strict CSP + nonce, `localResourceRoots`.
-- [ ] `media/reader.html|css|js`: header (surah · ref), Arabic (RTL, bundled font), translation, Prev / Next / Mode / Translation buttons, keyboard shortcuts.
-- [ ] Message protocol: webview → ext `{type: 'next'|'prev'|'toggleMode'|'toggleTranslation'|'translateSelection', text?}`; ext → webview `{type: 'render', ayah}`.
-- [ ] Theme via `--vscode-*` variables; test light, dark, high contrast.
-- **Done when:** user can open the panel and read with Prev/Next in both modes; bookmark survives reload.
+- [x] Contribute `viewsContainers.panel` + `views` (`quranForClaudeCode.reader`, type `webview`).
+- [x] `src/view/ReaderViewProvider.ts` with strict CSP + nonce, `localResourceRoots`.
+- [x] `media/reader.html|css|js`: header (surah · ref), Arabic (RTL, bundled font), translation, Prev / Next / Mode / Translation buttons, keyboard shortcuts.
+- [x] Message protocol (`translateSelection` lands in Phase 6): webview → ext `{type: 'next'|'prev'|'toggleMode'|'toggleTranslation'|'translateSelection', text?}`; ext → webview `{type: 'render', ayah}`.
+- [x] Theme via `--vscode-*` variables.
+- [ ] Manual check in light, dark and high-contrast themes.
+- **Done when:** user can open the panel and read with Prev/Next in both modes; bookmark survives reload. _(built and unit-tested; pending manual F5 check)_
 
 ## Phase 4 — Status bar, commands, settings
 - [ ] Status bar item with on/off, tooltip, busy spinner.
@@ -76,4 +77,4 @@ Each phase ends in a working, testable state. Check items off as they land.
 3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later.
 4. ~~**Font choice:** KFGQPC HAFS vs Amiri Quran.~~ Decided: Amiri Quran 1.003 (OFL), full code-point coverage verified.
 5. **Default translation:** confirm Indonesian (Kemenag) + English (Saheeh International) as the v1 pair.
-6. **Basmalah in ayah 1:** Tanzil's Uthmani text prefixes the basmalah to ayah 1 of every surah except 1 and 9 (e.g. 2:1 starts with it). The text must stay verbatim; decide in Phase 3 whether the UI shows it as-is or renders it as a separate header line *without* altering stored data (display-only split, verified against the exact basmalah string from 1:1).
+6. ~~**Basmalah in ayah 1:**~~ Decided: display-only split into a header line (`src/quran/display.ts`). Matches on letters ignoring diacritics (95:1 and 97:1 spell it with an extra shadda); shown text keeps the source marks and always re-joins to the exact stored ayah (tested for all 112 surahs).

@@ -21,7 +21,8 @@ Version: 0.1 (v1 scope) · Status: draft
 - Shows one ayah at a time:
   - Surah name (Arabic + transliteration), surah number, ayah number — e.g. `Al-Baqarah · 2:255`.
   - Arabic text, right-to-left, bundled Uthmani font, large size (configurable).
-  - Translation below (toggleable, see F5).
+  - For ayah 1 of every surah except 1 and 9, the basmalah that Tanzil prefixes to the text is shown as a separate centred header line. This is display-only: both lines are exact substrings of the stored ayah and re-join to it byte-for-byte.
+  - Translation below (toggleable, see F5), always followed by its label, e.g. `English — Saheeh International (translation)`.
 - Buttons: **Prev**, **Next**, **Mode** toggle (Random / Continuous), **Show/Hide translation**.
 - Keyboard (handled inside the webview, so only active when the panel is focused; no global keybindings): `←` next, `→` prev (RTL-natural), `T` toggle translation, `S` translate selection.
 - Follows VS Code theme colours via CSS variables (`--vscode-*`).
