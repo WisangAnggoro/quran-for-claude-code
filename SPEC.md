@@ -72,7 +72,13 @@ Version: 0.1 (v1 scope) · Status: draft
   2. On confirm, creates a backup `settings.json.bak-<timestamp>`, then **merges** hook entries (never overwrites existing hooks).
   3. Entries are tagged so they can be identified (command string contains `quran-for-claude-code`). Installing twice is a no-op.
 - Command `Quran: Uninstall Claude Code Hooks` removes only our tagged entries.
-- Hook commands (POSIX shell, used by Claude Code on macOS/Linux/WSL and Git Bash on Windows). Each writes to a temp file then renames, so the watcher never reads a half-written file. The trailing `# quran-for-claude-code` comment is the tag used for idempotency and uninstall.
+- Hook variants. Claude Code runs a hook's `command` with `sh -c` on macOS/Linux, Git Bash on Windows, or PowerShell on Windows when Git Bash is missing; a hook's `"shell": "powershell"` forces PowerShell.
+  - **posix** (extension running on macOS/Linux/WSL): commands below; state under `$HOME`.
+  - **gitbash** (native Windows): same as posix but `d="$(cygpath -u "$USERPROFILE")/.quran-for-claude-code"`.
+  - **powershell** (native Windows): `$d = Join-Path $env:USERPROFILE '.quran-for-claude-code'`, `[IO.File]::WriteAllText` to `state.tmp`, then `Move-Item -Force` to `state`; the entry has `"shell": "powershell"`.
+  - On native Windows the install command asks which one to use, recommending Git Bash when `bash.exe` is found (`CLAUDE_CODE_GIT_BASH_PATH` or the usual Git for Windows locations) and PowerShell otherwise. The extension reads the state file from `%USERPROFILE%` on Windows, because `$HOME` in Git Bash can differ. Installing one variant replaces any other variant of ours.
+  - All three variants were run in real shells (sh, Git Bash, Windows PowerShell 5.1) and produce the same file.
+- posix hook commands. Each writes to a temp file then renames, so the watcher never reads a half-written file. The trailing `# quran-for-claude-code` comment is the tag used for idempotency and uninstall.
   - `UserPromptSubmit` (busy):
     ```sh
     d="$HOME/.quran-for-claude-code"; mkdir -p "$d" && printf 'busy %s' "$(date +%s)" > "$d/state.tmp" && mv -f "$d/state.tmp" "$d/state" # quran-for-claude-code

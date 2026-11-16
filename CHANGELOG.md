@@ -11,6 +11,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - About & Attribution command, and a Tanzil credit line in the panel.
 - README, CONTRIBUTING and an original 128px icon.
 - Translate selection: select Arabic text in the panel and press `S`, right-click → *Translate Selection*, or run the command, to see the bundled translation (with translator credit) in a popover.
+- Native Windows support for the hooks: choose Git Bash or PowerShell when installing; the status file lives under `%USERPROFILE%`.
 - Claude Code integration: `Install/Uninstall Claude Code Hooks` commands (confirm first, back up `settings.json`, merge without touching other hooks, idempotent, abort on invalid JSON). While Claude Code works, the panel opens without taking focus and moves to the next ayah; the status bar shows a spinner.
 - Status bar item: `Quran: On/Off` toggle with mode and bookmark in the tooltip.
 - Commands: Toggle On/Off, Next/Previous Ayah, Switch Mode, Go to Ayah… (accepts `2:255`, `al-baqarah 255`, `yasin`), Reset Bookmark (asks first).

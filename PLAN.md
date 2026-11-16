@@ -80,7 +80,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 
 ## Open questions
 1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
-2. **Windows native:** confirm the hook command works under Claude Code on Windows (Git Bash); otherwise ship a PowerShell variant.
+2. ~~**Windows native:**~~ Done: `gitbash` and `powershell` hook variants (install asks on native Windows), state read from `%USERPROFILE%`. All variants run successfully in real sh, Git Bash and Windows PowerShell 5.1. Still untested: a full run with Claude Code itself on native Windows, and how old a Claude Code version supports the hook `shell` field.
 3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later. Multiple VS Code *windows* are handled (shared bookmark re-read before each move; per-turn claim in globalState); multiple *Claude sessions* still share one file.
 4. ~~**Font choice:** KFGQPC HAFS vs Amiri Quran.~~ Decided: Amiri Quran 1.003 (OFL), full code-point coverage verified.
 5. ~~**Default translation:**~~ Decided: bundle Kemenag (Indonesian) + Saheeh International (English); default English for everyone (no locale detection); switch via the panel's translation button or **Quran: Choose Translation…**.

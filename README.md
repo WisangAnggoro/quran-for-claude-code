@@ -35,7 +35,7 @@ The install command shows exactly what it will add and asks before changing anyt
 
 Each command is a single shell line ending in `# quran-for-claude-code`. Before writing, the extension saves a backup (`settings.json.bak-<date>-<time>`), keeps all your other settings and hooks, and stops if the file is not valid JSON. Installing twice changes nothing. **Quran: Uninstall Claude Code Hooks** removes only these tagged entries.
 
-The hooks need a POSIX shell, which Claude Code uses on macOS, Linux and WSL (and Git Bash on Windows).
+On macOS, Linux and WSL the hooks run in `sh`. On native Windows, the install command asks whether Claude Code should run them in **Git Bash** (Claude Code's default when Git for Windows is installed) or **PowerShell** (works without Git Bash; needs a Claude Code version that supports the hook `shell` setting). Either way the status file is `%USERPROFILE%\.quran-for-claude-code\state`. Running the install command again with the other choice switches over cleanly.
 
 ## Keys (when the panel is focused)
 
