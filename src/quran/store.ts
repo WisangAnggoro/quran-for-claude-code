@@ -9,6 +9,12 @@ import type { SurahMeta } from './types';
 export const TRANSLATION_IDS = ['id.indonesian', 'en.sahih'] as const;
 export type TranslationId = (typeof TRANSLATION_IDS)[number];
 
+/** Shown under every translation so it is never mistaken for the Quran text itself. */
+export const TRANSLATION_CREDITS: Record<TranslationId, { language: string; translator: string }> = {
+  'id.indonesian': { language: 'Bahasa Indonesia', translator: 'Kementerian Agama RI' },
+  'en.sahih': { language: 'English', translator: 'Saheeh International' },
+};
+
 /** Shape of data/quran-uthmani.json and data/trans/*.json. */
 export interface TextFile {
   /** Source copyright/credit block, verbatim. Must stay with the text. */
