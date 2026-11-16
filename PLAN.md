@@ -3,12 +3,12 @@
 Each phase ends in a working, testable state. Check items off as they land.
 
 ## Phase 0 — Scaffold
-- [ ] `git init`, `.gitignore`, `.vscodeignore`, MIT `LICENSE`.
-- [ ] `package.json` with identity from SPEC §1, `engines.vscode`, `main: dist/extension.js`, empty `contributes`.
-- [ ] TypeScript (`strict`), esbuild bundle script, ESLint.
-- [ ] `src/extension.ts` with `activate`/`deactivate`; activation on `onStartupFinished` + view/command events.
-- [ ] `.vscode/launch.json` for F5 Extension Development Host.
-- **Done when:** F5 launches and the extension activates with no errors.
+- [x] `git init`, `.gitignore`, `.vscodeignore`, MIT `LICENSE`.
+- [x] `package.json` with identity from SPEC §1, `engines.vscode`, `main: dist/extension.js`, empty `contributes`.
+- [x] TypeScript (`strict`), esbuild bundle script, ESLint.
+- [x] `src/extension.ts` with `activate`/`deactivate`; activation on `onStartupFinished` + view/command events.
+- [x] `.vscode/launch.json` for F5 Extension Development Host.
+- **Done when:** F5 launches and the extension activates with no errors. _(build, typecheck and lint verified; F5 check pending manual run)_
 
 ## Phase 1 — Data pipeline
 - [ ] Download (manually, once) into `data-src/` (git-ignored): Tanzil `quran-uthmani.txt` (with ayah numbers), `quran-data.xml` (surah metadata), translations `id.indonesian.txt`, `en.sahih.txt`.
