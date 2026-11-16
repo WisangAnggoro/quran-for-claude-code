@@ -4,6 +4,7 @@
   "description": "Unofficial community extension. Not affiliated with or endorsed by Anthropic. Read the Quran while Claude Code works — totally offline.",
   "icon": "media/icon.png",
   "version": "0.0.1",
+  "publisher": "local",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "engines": {
@@ -187,13 +188,15 @@
     "lint": "eslint .",
     "build:data": "node scripts/build-data.mjs",
     "test": "mocha",
-    "build:icon": "node scripts/build-icon.mjs"
+    "build:icon": "node scripts/build-icon.mjs",
+    "package": "vsce package --allow-missing-repository --no-rewrite-relative-links"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
     "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^4.1.1",
     "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
     "mocha": "^12.0.3",
