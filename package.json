@@ -39,6 +39,38 @@
         }
       ]
     },
+    "commands": [
+      {
+        "command": "quranForClaudeCode.toggle",
+        "title": "Toggle On/Off",
+        "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.next",
+        "title": "Next Ayah",
+        "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.prev",
+        "title": "Previous Ayah",
+        "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.toggleMode",
+        "title": "Switch Mode (Random/Continuous)",
+        "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.goTo",
+        "title": "Go to Ayah…",
+        "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.resetBookmark",
+        "title": "Reset Bookmark to Al-Fatihah",
+        "category": "Quran"
+      }
+    ],
     "configuration": {
       "title": "Quran for Claude Code",
       "properties": {

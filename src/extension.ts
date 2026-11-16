@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
+import { registerCommands } from './commands';
 import { ReaderController } from './controller';
 import { QuranStore } from './quran/store';
 import { ReaderViewProvider } from './view/ReaderViewProvider';
+import { StatusBar } from './view/StatusBar';
 
 const BOOKMARK_KEY = 'bookmark';
 
@@ -21,6 +23,8 @@ export function activate(context: vscode.ExtensionContext): void {
     controller,
     provider,
     vscode.window.registerWebviewViewProvider(ReaderViewProvider.viewId, provider),
+    new StatusBar(controller),
+    ...registerCommands(controller, provider, store),
   );
 }
 
