@@ -24,8 +24,8 @@ export class Reader {
   ) {
     if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a positive integer');
     this._mode = mode;
-    const saved = store.get();
-    this._bookmark = typeof saved === 'number' && this.inRange(saved) ? saved : 0;
+    this._bookmark = 0;
+    this.syncBookmark();
   }
 
   get mode(): Mode {
@@ -34,12 +34,13 @@ export class Reader {
 
   /** Continuous-mode position. Random mode never changes it. */
   get bookmark(): number {
+    this.syncBookmark();
     return this._bookmark;
   }
 
   /** The ayah to show now. */
   current(): number {
-    if (this._mode === 'continuous') return this._bookmark;
+    if (this._mode === 'continuous') return this.bookmark;
     if (this.cursor < 0) this.pushRandom();
     return this.history[this.cursor];
   }
@@ -55,14 +56,14 @@ export class Reader {
   }
 
   next(): number {
-    if (this._mode === 'continuous') return this.moveBookmark(this.wrap(this._bookmark + 1));
+    if (this._mode === 'continuous') return this.moveBookmark(this.wrap(this.bookmark + 1));
     if (this.cursor < this.history.length - 1) this.cursor++;
     else this.pushRandom();
     return this.current();
   }
 
   prev(): number {
-    if (this._mode === 'continuous') return this.moveBookmark(this.wrap(this._bookmark - 1));
+    if (this._mode === 'continuous') return this.moveBookmark(this.wrap(this.bookmark - 1));
     this.current(); // ensure history is seeded
     if (this.cursor > 0) this.cursor--;
     return this.current();
@@ -81,7 +82,17 @@ export class Reader {
     return this.current();
   }
 
+  /**
+   * The store is the source of truth: another VS Code window may have moved the shared
+   * bookmark, so re-read it before every use instead of trusting the in-memory copy.
+   */
+  private syncBookmark(): void {
+    const saved = this.store.get();
+    if (typeof saved === 'number' && this.inRange(saved)) this._bookmark = saved;
+  }
+
   private moveBookmark(index: number): number {
+    this.syncBookmark();
     if (index !== this._bookmark) {
       this._bookmark = index;
       this.store.set(index);

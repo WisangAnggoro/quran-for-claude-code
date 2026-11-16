@@ -60,6 +60,14 @@ describe('Reader: continuous mode', () => {
     assert.deepEqual(store.writes, [261, 0]);
     assert.throws(() => r.goTo(TOTAL), RangeError);
   });
+  it('follows bookmark changes made by another window', () => {
+    const store = new MemoryStore(10);
+    const r = new Reader(TOTAL, store);
+    store.value = 500; // another window advanced the shared bookmark
+    assert.equal(r.current(), 500);
+    assert.equal(r.next(), 501);
+    assert.equal(store.value, 501);
+  });
   it('does not write when the bookmark does not change', () => {
     const store = new MemoryStore(5);
     new Reader(TOTAL, store).goTo(5);
