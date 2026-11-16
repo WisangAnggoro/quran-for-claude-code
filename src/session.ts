@@ -33,13 +33,11 @@ export interface RenderPayload {
   arabicFontSize: number;
 }
 
-/**
- * Translation to use. An explicit user choice wins; otherwise Indonesian for an
- * Indonesian VS Code UI and English for everything else.
- */
-export function resolveTranslation(value: unknown, explicitlySet: boolean, locale: string): TranslationSetting {
-  if (explicitlySet && (value === 'none' || isTranslationId(value))) return value;
-  return locale.toLowerCase().startsWith('id') ? 'id.indonesian' : 'en.sahih';
+export const DEFAULT_TRANSLATION: TranslationId = 'en.sahih';
+
+/** The configured translation, or the default (English) if the value is missing or unknown. */
+export function resolveTranslation(value: unknown): TranslationSetting {
+  return value === 'none' || isTranslationId(value) ? value : DEFAULT_TRANSLATION;
 }
 
 export function clampFontSize(value: unknown): number {
@@ -89,21 +87,20 @@ export const MAX_SELECTION_AYAT = 3;
 /**
  * Look up the bundled human translation for the ayat a selection touched. Never machine
  * translation. Index 0 is used for the basmalah header (its translation is that of 1:1).
- * Invalid indices are dropped; returns undefined if nothing valid remains.
+ * Invalid indices are dropped; returns undefined if nothing valid remains. If translations
+ * are turned off ("none"), the default translation is used, since the user asked for one.
  */
 export async function translateSelection(
   store: QuranStore,
   indices: unknown,
   translation: TranslationSetting,
-  locale: string,
 ): Promise<SelectionTranslation | undefined> {
   const qIndex = await store.index();
   const valid = Array.isArray(indices)
     ? [...new Set(indices)].filter((i): i is number => typeof i === 'number' && qIndex.isValidIndex(i))
     : [];
   if (valid.length === 0) return undefined;
-  const id = translation === 'none' ? resolveTranslation(undefined, false, locale) : translation;
-  if (id === 'none') return undefined;
+  const id = translation === 'none' ? DEFAULT_TRANSLATION : translation;
   const t = await store.translation(id);
   const c = TRANSLATION_CREDITS[id];
   return {

@@ -126,7 +126,7 @@
             "No translation"
           ],
           "default": "en.sahih",
-          "markdownDescription": "Translation shown under the Arabic text. If you never change this, Indonesian is used when VS Code's display language is Indonesian."
+          "markdownDescription": "Translation shown under the Arabic text. You can also switch it from the panel or with **Quran: Choose Translation…**."
         },
         "quranForClaudeCode.showTranslation": {
           "type": "boolean",

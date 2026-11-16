@@ -11,14 +11,13 @@ const store = new QuranStore(dataDir);
 const base: ReaderSettings = { mode: 'continuous', translation: 'en.sahih', showTranslation: true, arabicFontSize: 28 };
 
 describe('resolveTranslation', () => {
-  it('uses an explicit choice', () => {
-    assert.equal(resolveTranslation('none', true, 'id'), 'none');
-    assert.equal(resolveTranslation('en.sahih', true, 'id'), 'en.sahih');
+  it('uses a valid configured value', () => {
+    assert.equal(resolveTranslation('none'), 'none');
+    assert.equal(resolveTranslation('id.indonesian'), 'id.indonesian');
   });
-  it('falls back to the UI locale', () => {
-    assert.equal(resolveTranslation('en.sahih', false, 'id'), 'id.indonesian');
-    assert.equal(resolveTranslation(undefined, false, 'en-US'), 'en.sahih');
-    assert.equal(resolveTranslation('bogus', true, 'ID'), 'id.indonesian');
+  it('defaults to English for missing or unknown values', () => {
+    assert.equal(resolveTranslation(undefined), 'en.sahih');
+    assert.equal(resolveTranslation('bogus'), 'en.sahih');
   });
 });
 
@@ -59,21 +58,25 @@ describe('translateSelection', () => {
   const indo: string[] = JSON.parse(readFileSync(join(dataDir, 'trans', 'id.indonesian.json'), 'utf8')).ayat;
 
   it('returns the exact bundled translation with its label', async () => {
-    const r = await translateSelection(store, [261], 'en.sahih', 'en');
+    const r = await translateSelection(store, [261], 'en.sahih');
     assert.deepEqual(r?.items, [{ ref: '2:255', text: sahih[261] }]);
     assert.match(r?.label ?? '', /Saheeh International/);
   });
   it('dedupes, sorts, drops invalid indices and caps the count', async () => {
-    const r = await translateSelection(store, [9, 7, 7, -1, 6236, 'x', 1.5, 8, 10], 'en.sahih', 'en');
+    const r = await translateSelection(store, [9, 7, 7, -1, 6236, 'x', 1.5, 8, 10], 'en.sahih');
     assert.deepEqual(r?.items.map((i) => i.ref), ['2:1', '2:2', '2:3']);
   });
-  it('falls back to the locale default when translation is "none"', async () => {
-    const r = await translateSelection(store, [0], 'none', 'id');
+  it('uses the chosen translation', async () => {
+    const r = await translateSelection(store, [0], 'id.indonesian');
     assert.equal(r?.items[0].text, indo[0]);
     assert.match(r?.label ?? '', /Kementerian Agama/);
   });
+  it('falls back to English when translation is "none"', async () => {
+    const r = await translateSelection(store, [0], 'none');
+    assert.equal(r?.items[0].text, sahih[0]);
+  });
   it('returns undefined for nothing valid', async () => {
-    assert.equal(await translateSelection(store, [], 'en.sahih', 'en'), undefined);
-    assert.equal(await translateSelection(store, 'nope', 'en.sahih', 'en'), undefined);
+    assert.equal(await translateSelection(store, [], 'en.sahih'), undefined);
+    assert.equal(await translateSelection(store, 'nope', 'en.sahih'), undefined);
   });
 });

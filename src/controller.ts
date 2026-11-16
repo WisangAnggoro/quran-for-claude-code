@@ -81,7 +81,7 @@ export class ReaderController implements vscode.Disposable {
 
   /** Bundled translation for ayat the user selected in the panel (lookup only). */
   translateSelection(indices: unknown): Promise<SelectionTranslation | undefined> {
-    return translateSelection(this.store, indices, this.settings.translation, vscode.env.language);
+    return translateSelection(this.store, indices, this.settings.translation);
   }
 
   async toggleMode(): Promise<void> {

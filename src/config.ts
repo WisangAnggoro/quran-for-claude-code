@@ -7,11 +7,9 @@ export const SECTION = 'quranForClaudeCode';
 
 export function readSettings(): ReaderSettings {
   const c = vscode.workspace.getConfiguration(SECTION);
-  const t = c.inspect<string>('translation');
-  const explicit = [t?.globalValue, t?.workspaceValue, t?.workspaceFolderValue].some((v) => v !== undefined);
   return {
     mode: c.get('mode') === 'random' ? 'random' : 'continuous',
-    translation: resolveTranslation(c.get('translation'), explicit, vscode.env.language),
+    translation: resolveTranslation(c.get('translation')),
     showTranslation: c.get('showTranslation', true),
     arabicFontSize: clampFontSize(c.get('arabicFontSize')),
   };
