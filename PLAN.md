@@ -12,6 +12,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 
 ## Phase 1 — Data pipeline
 - [ ] Download (manually, once) into `data-src/` (git-ignored): Tanzil `quran-uthmani.txt` (with ayah numbers), `quran-data.xml` (surah metadata), translations `id.indonesian.txt`, `en.sahih.txt`.
+- [ ] `scripts/sources.json`: URL, Tanzil version/date and SHA-256 for each raw file; `build-data.mjs` verifies hashes before parsing.
 - [ ] `scripts/build-data.mjs`: parse → emit `data/quran-uthmani.json`, `data/meta.json`, `data/trans/*.json`.
 - [ ] Validation in the script: exactly 6,236 ayat; ayah counts per surah match metadata; text is byte-identical to source lines (no trimming beyond line endings).
 - [ ] Copy Tanzil license text to `data/LICENSE-TANZIL.txt`; add font + its license to `media/fonts/`.

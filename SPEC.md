@@ -128,6 +128,7 @@ Stored in `context.globalState` (survives restarts, shared across windows):
   - `quran-uthmani.json` — `string[6236]`, verbatim Tanzil Uthmani text.
   - `meta.json` — 114 surahs: `{ number, nameArabic, nameLatin, nameTranslation, ayahCount, startIndex, revelation }`.
   - `trans/id.indonesian.json`, `trans/en.sahih.json` — `string[6236]`.
+- Provenance: `scripts/sources.json` (committed) lists every raw source file with its download URL, Tanzil version/date and SHA-256. Raw files live in `data-src/` (git-ignored, downloaded manually). `npm run build:data` refuses to run if any file in `data-src/` does not match its recorded hash, so anyone can reproduce `data/` byte-for-byte and verify the text is unmodified.
 - Data is loaded lazily on first panel open; translation files are loaded only when selected.
 - Expected package size: < 5 MB.
 
