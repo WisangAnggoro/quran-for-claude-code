@@ -151,7 +151,7 @@ Stored in `context.globalState` (survives restarts, shared across windows):
 
 - Quran text: Tanzil Project (tanzil.net) — verbatim copy, unchanged, with link back. Required notice included in `data/LICENSE-TANZIL.txt` and the About view.
 - Translations: each translator credited in UI and README; Tanzil translations are for non-commercial use — the extension is and stays free.
-- Font: KFGQPC Uthmanic Script HAFS (King Fahd Complex) or Amiri Quran (SIL OFL) — license file bundled.
+- Font: Amiri Quran 1.003 (SIL OFL 1.1), bundled at `media/fonts/AmiriQuran.ttf` with `OFL.txt`. Chosen over KFGQPC HAFS because its redistribution terms are clear; verified to cover every code point in the Tanzil Uthmani text.
 - README footer: "Claude" and "Claude Code" are trademarks of Anthropic, PBC. This project is unofficial and not affiliated with Anthropic.
 - Icon: original artwork; no Anthropic logo, starburst, or brand orange.
 

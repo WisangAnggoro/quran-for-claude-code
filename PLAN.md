@@ -16,8 +16,8 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] `scripts/build-data.mjs`: parse → emit `data/quran-uthmani.json`, `data/meta.json`, `data/trans/*.json`.
 - [x] Validation in the script: exactly 6,236 ayat; ayah counts per surah match metadata; text is byte-identical to source lines (no trimming beyond line endings).
 - [x] Copy Tanzil license text to `data/LICENSE-TANZIL.txt` (automated by `build-data.mjs`; notice also embedded in each JSON).
-- [ ] Add font + its license to `media/fonts/` (blocked on open question 4).
-- **Done when:** `npm run build:data` produces the files and validation passes.
+- [x] Add font + its license to `media/fonts/` (Amiri Quran 1.003, SIL OFL).
+- **Done when:** `npm run build:data` produces the files and validation passes. ✅
 
 ## Phase 2 — Reader core (no UI)
 - [ ] `src/quran/index.ts`: `toRef(index) → {surah, ayah}`, `fromRef(surah, ayah) → index`, `parseRef("2:255" | "al-baqarah 255")`.
@@ -74,6 +74,6 @@ Each phase ends in a working, testable state. Check items off as they land.
 1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
 2. **Windows native:** confirm the hook command works under Claude Code on Windows (Git Bash); otherwise ship a PowerShell variant.
 3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later.
-4. **Font choice:** KFGQPC HAFS (most authentic for Uthmani text) vs Amiri Quran (OFL, clearer license). Confirm KFGQPC redistribution terms.
+4. ~~**Font choice:** KFGQPC HAFS vs Amiri Quran.~~ Decided: Amiri Quran 1.003 (OFL), full code-point coverage verified.
 5. **Default translation:** confirm Indonesian (Kemenag) + English (Saheeh International) as the v1 pair.
 6. **Basmalah in ayah 1:** Tanzil's Uthmani text prefixes the basmalah to ayah 1 of every surah except 1 and 9 (e.g. 2:1 starts with it). The text must stay verbatim; decide in Phase 3 whether the UI shows it as-is or renders it as a separate header line *without* altering stored data (display-only split, verified against the exact basmalah string from 1:1).
