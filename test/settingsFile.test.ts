@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { HookConfigError, installHooks, uninstallHooks } from '../src/claude/hooks';
+import { HookConfigError, hooksInstalled, installHooks, uninstallHooks } from '../src/claude/hooks';
 import { applyToSettingsFile, claudeSettingsPath, readSettingsFile } from '../src/claude/settingsFile';
 
 describe('claudeSettingsPath', () => {
@@ -61,6 +61,15 @@ describe('applyToSettingsFile', () => {
     await assert.rejects(applyToSettingsFile(path, installHooks, when), HookConfigError);
     assert.equal(readFileSync(path, 'utf8'), '{ "model": "opus", }');
     assert.deepEqual(files(), ['settings.json']);
+  });
+
+  it('accepts a UTF-8 BOM (common on Windows) and keeps it when writing', async () => {
+    seed('\uFEFF{\n  "model": "opus"\n}\n');
+    const r = await applyToSettingsFile(path, installHooks, when);
+    assert.equal(r.changed, true);
+    const written = readFileSync(path, 'utf8');
+    assert.ok(written.startsWith('\uFEFF{'), 'BOM kept');
+    assert.equal(hooksInstalled((await readSettingsFile(path)).data), true);
   });
 
   it('round-trips install then uninstall back to the same data', async () => {

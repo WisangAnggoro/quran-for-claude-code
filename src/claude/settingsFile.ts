@@ -26,9 +26,11 @@ export async function readSettingsFile(path: string): Promise<SettingsFile> {
     if ((err as NodeJS.ErrnoException).code === 'ENOENT') return { exists: false, data: {} };
     throw err;
   }
-  if (text.trim() === '') return { exists: true, data: {}, text };
+  // Windows editors often save JSON with a UTF-8 BOM; it is not part of the JSON.
+  const json = text.startsWith('\uFEFF') ? text.slice(1) : text;
+  if (json.trim() === '') return { exists: true, data: {}, text };
   try {
-    return { exists: true, data: JSON.parse(text), text };
+    return { exists: true, data: JSON.parse(json), text };
   } catch {
     throw new HookConfigError(`${path} is not valid JSON, so it was left unchanged. Fix it and try again.`);
   }
@@ -65,7 +67,8 @@ export async function applyToSettingsFile(
     await copyFile(path, backup);
   }
   const trailingNewline = file.text === undefined || file.text.endsWith('\n') ? '\n' : '';
-  const out = JSON.stringify(result.settings, null, indentOf(file.text)) + trailingNewline;
+  const bom = file.text?.startsWith('\uFEFF') ? '\uFEFF' : '';
+  const out = bom + JSON.stringify(result.settings, null, indentOf(file.text)) + trailingNewline;
   await mkdir(dirname(path), { recursive: true });
   const tmp = `${path}.tmp-${process.pid}`;
   await writeFile(tmp, out, 'utf8');
