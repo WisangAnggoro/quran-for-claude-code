@@ -1,0 +1,36 @@
+{
+  "name": "quran-for-claude-code",
+  "displayName": "Quran for Claude Code (Unofficial)",
+  "description": "Unofficial community extension. Not affiliated with or endorsed by Anthropic. Read the Quran while Claude Code works — totally offline.",
+  "version": "0.0.1",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Education"
+  ],
+  "extensionKind": [
+    "workspace",
+    "ui"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {},
+  "scripts": {
+    "build": "node scripts/esbuild.mjs",
+    "watch": "node scripts/esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "vscode:prepublish": "npm run typecheck && node scripts/esbuild.mjs --production"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.28.2",
+    "typescript": "~6.0"
+  }
+}
