@@ -11,11 +11,12 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** F5 launches and the extension activates with no errors. _(build, typecheck and lint verified; F5 check pending manual run)_
 
 ## Phase 1 — Data pipeline
-- [ ] Download (manually, once) into `data-src/` (git-ignored): Tanzil `quran-uthmani.txt` (with ayah numbers), `quran-data.xml` (surah metadata), translations `id.indonesian.txt`, `en.sahih.txt`.
+- [x] Download (manually, once) into `data-src/` (git-ignored): Tanzil `quran-uthmani.txt` (with ayah numbers), `quran-data.xml` (surah metadata), translations `id.indonesian.txt`, `en.sahih.txt`.
 - [x] `scripts/sources.json`: URL, Tanzil version/date and SHA-256 for each raw file; `build-data.mjs` verifies hashes before parsing.
 - [x] `scripts/build-data.mjs`: parse → emit `data/quran-uthmani.json`, `data/meta.json`, `data/trans/*.json`.
 - [x] Validation in the script: exactly 6,236 ayat; ayah counts per surah match metadata; text is byte-identical to source lines (no trimming beyond line endings).
-- [ ] Copy Tanzil license text to `data/LICENSE-TANZIL.txt` (automated by `build-data.mjs` from the source comment block; pending real run); add font + its license to `media/fonts/`.
+- [x] Copy Tanzil license text to `data/LICENSE-TANZIL.txt` (automated by `build-data.mjs`; notice also embedded in each JSON).
+- [ ] Add font + its license to `media/fonts/` (blocked on open question 4).
 - **Done when:** `npm run build:data` produces the files and validation passes.
 
 ## Phase 2 — Reader core (no UI)
@@ -75,3 +76,4 @@ Each phase ends in a working, testable state. Check items off as they land.
 3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later.
 4. **Font choice:** KFGQPC HAFS (most authentic for Uthmani text) vs Amiri Quran (OFL, clearer license). Confirm KFGQPC redistribution terms.
 5. **Default translation:** confirm Indonesian (Kemenag) + English (Saheeh International) as the v1 pair.
+6. **Basmalah in ayah 1:** Tanzil's Uthmani text prefixes the basmalah to ayah 1 of every surah except 1 and 9 (e.g. 2:1 starts with it). The text must stay verbatim; decide in Phase 3 whether the UI shows it as-is or renders it as a separate header line *without* altering stored data (display-only split, verified against the exact basmalah string from 1:1).
