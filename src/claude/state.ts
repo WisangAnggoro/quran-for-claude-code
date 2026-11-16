@@ -1,3 +1,5 @@
+import { posix, win32 } from 'node:path';
+
 // Parsing of ~/.quran-for-claude-code/state, written by our Claude Code hooks.
 // Format: "busy <unix-seconds>" or "idle <unix-seconds>". Pure; unit-tested.
 
@@ -23,4 +25,13 @@ export function parseState(content: string | undefined, nowSeconds: number, stal
   if (m[1] === 'idle') return { activity: 'idle', timestamp };
   if (nowSeconds - timestamp > staleMinutes * 60) return { activity: 'idle', timestamp };
   return { activity: 'busy', timestamp };
+}
+
+/**
+ * Where the hooks write the state file. On Windows this is under %USERPROFILE% to match
+ * the gitbash and powershell hook variants ($HOME in Git Bash can point elsewhere).
+ */
+export function stateFilePath(platform: string, env: Record<string, string | undefined>, home: string): string {
+  if (platform === 'win32') return win32.join(env.USERPROFILE || home, '.quran-for-claude-code', 'state');
+  return posix.join(home, '.quran-for-claude-code', 'state');
 }

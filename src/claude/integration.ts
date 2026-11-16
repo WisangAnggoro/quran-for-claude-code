@@ -2,15 +2,15 @@
 // and advancing to the next ayah on each new prompt.
 
 import { homedir } from 'node:os';
-import { join } from 'node:path';
 import * as vscode from 'vscode';
 import { readExtensionSettings } from '../config';
 import type { ReaderController } from '../controller';
 import type { ReaderViewProvider } from '../view/ReaderViewProvider';
 import type { StatusBar } from '../view/StatusBar';
+import { stateFilePath } from './state';
 import { StateWatcher, type StateChange } from './stateWatcher';
 
-export const STATE_FILE = join(homedir(), '.quran-for-claude-code', 'state');
+export const STATE_FILE = stateFilePath(process.platform, process.env, homedir());
 const LAST_TURN_KEY = 'lastAdvancedTurn';
 
 export class ClaudeIntegration implements vscode.Disposable {

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { parseState } from '../src/claude/state';
+import { parseState, stateFilePath } from '../src/claude/state';
 
 const now = 1_800_000_000;
 
@@ -17,5 +17,14 @@ describe('parseState', () => {
     for (const c of [undefined, '', 'busy', 'busy abc', 'running 123', 'busy 1 2']) {
       assert.deepEqual(parseState(c, now, 30), { activity: 'idle' }, String(c));
     }
+  });
+});
+
+describe('stateFilePath', () => {
+  it('uses $HOME on POSIX and %USERPROFILE% on Windows', () => {
+    assert.equal(stateFilePath('linux', { USERPROFILE: 'C:\\Users\\x' }, '/home/u'), '/home/u/.quran-for-claude-code/state');
+    assert.equal(stateFilePath('darwin', {}, '/Users/u'), '/Users/u/.quran-for-claude-code/state');
+    assert.equal(stateFilePath('win32', { USERPROFILE: 'C:\\Users\\x' }, 'D:\\home'), 'C:\\Users\\x\\.quran-for-claude-code\\state');
+    assert.equal(stateFilePath('win32', {}, 'C:\\Users\\y'), 'C:\\Users\\y\\.quran-for-claude-code\\state');
   });
 });
