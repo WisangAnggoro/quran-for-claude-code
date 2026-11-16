@@ -20,7 +20,53 @@
     "onStartupFinished"
   ],
   "main": "./dist/extension.js",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "title": "Quran for Claude Code",
+      "properties": {
+        "quranForClaudeCode.mode": {
+          "type": "string",
+          "enum": [
+            "continuous",
+            "random"
+          ],
+          "enumDescriptions": [
+            "Read in order from your bookmark; Next moves the bookmark.",
+            "Show a random ayah; does not move your bookmark."
+          ],
+          "default": "continuous",
+          "description": "Reading mode."
+        },
+        "quranForClaudeCode.translation": {
+          "type": "string",
+          "enum": [
+            "id.indonesian",
+            "en.sahih",
+            "none"
+          ],
+          "enumDescriptions": [
+            "Bahasa Indonesia — Kementerian Agama RI",
+            "English — Saheeh International",
+            "No translation"
+          ],
+          "default": "en.sahih",
+          "markdownDescription": "Translation shown under the Arabic text. If you never change this, Indonesian is used when VS Code's display language is Indonesian."
+        },
+        "quranForClaudeCode.showTranslation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the translation by default."
+        },
+        "quranForClaudeCode.arabicFontSize": {
+          "type": "number",
+          "default": 28,
+          "minimum": 12,
+          "maximum": 72,
+          "description": "Arabic text size in pixels."
+        }
+      }
+    }
+  },
   "scripts": {
     "build": "node scripts/esbuild.mjs",
     "watch": "node scripts/esbuild.mjs --watch",
