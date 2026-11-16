@@ -8,6 +8,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Project scaffold: strict TypeScript, esbuild bundle, ESLint with rules that forbid network APIs, F5 launch config.
 - `npm run build:data`: parses Tanzil sources into `data/`, pins each source by SHA-256, checks 6,236 ayat against surah metadata, and verifies every ayah round-trips byte-for-byte.
+- Claude Code integration: `Install/Uninstall Claude Code Hooks` commands (confirm first, back up `settings.json`, merge without touching other hooks, idempotent, abort on invalid JSON). While Claude Code works, the panel opens without taking focus and moves to the next ayah; the status bar shows a spinner.
 - Status bar item: `Quran: On/Off` toggle with mode and bookmark in the tooltip.
 - Commands: Toggle On/Off, Next/Previous Ayah, Switch Mode, Go to Ayah… (accepts `2:255`, `al-baqarah 255`, `yasin`), Reset Bookmark (asks first).
 - Settings: `enabled`, `autoReveal`, `advanceOnNewTurn`, `staleBusyMinutes`.

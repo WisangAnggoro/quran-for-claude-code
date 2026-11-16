@@ -43,13 +43,13 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** every command works from the Command Palette. _(pending F5 check)_
 
 ## Phase 5 — Claude Code integration
-- [ ] `src/claude/stateWatcher.ts`: watch `~/.quran-for-claude-code/state`, parse, stale check, emit `busy`/`idle` events (debounced).
-- [ ] Wire: on `idle→busy` → reveal (preserveFocus) + advance per settings.
-- [ ] `src/claude/hooks.ts`: read/merge/backup `~/.claude/settings.json`; idempotent install; uninstall only tagged entries. Tolerate missing file / invalid JSON (abort with message, never clobber).
-- [ ] Unit tests for merge/uninstall on fixtures (empty, existing hooks, already installed, malformed).
-- [ ] First-run info message offering hook install (dismissable forever).
+- [x] `src/claude/stateWatcher.ts`: watch `~/.quran-for-claude-code/state`, parse, stale check, emit `busy`/`idle` events (debounced).
+- [x] Wire: on `idle→busy` → reveal (preserveFocus) + advance per settings.
+- [x] `src/claude/hooks.ts`: read/merge/backup `~/.claude/settings.json`; idempotent install; uninstall only tagged entries. Tolerate missing file / invalid JSON (abort with message, never clobber).
+- [x] Unit tests for merge/uninstall on fixtures (empty, existing hooks, already installed, malformed).
+- [x] First-run info message offering hook install (dismissable forever).
 - [ ] Manual test with real Claude Code: prompt → panel shows ayah; Stop → spinner stops.
-- **Done when:** end-to-end works in VS Code on Linux/WSL and macOS.
+- **Done when:** end-to-end works in VS Code on Linux/WSL and macOS. _(unit-tested; hook commands verified under `sh` with a temp HOME; real Claude Code run pending)_
 
 ## Phase 6 — Translate selection
 - [ ] In webview: detect selection inside ayah element; context menu via `webview/context` contribution + `data-vscode-context`; `S` key handled inside the webview (no global keybinding).
@@ -74,7 +74,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 ## Open questions
 1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
 2. **Windows native:** confirm the hook command works under Claude Code on Windows (Git Bash); otherwise ship a PowerShell variant.
-3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later.
+3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later. Multiple VS Code *windows* are handled (shared bookmark re-read before each move; per-turn claim in globalState); multiple *Claude sessions* still share one file.
 4. ~~**Font choice:** KFGQPC HAFS vs Amiri Quran.~~ Decided: Amiri Quran 1.003 (OFL), full code-point coverage verified.
 5. **Default translation:** confirm Indonesian (Kemenag) + English (Saheeh International) as the v1 pair.
 6. ~~**Basmalah in ayah 1:**~~ Decided: display-only split into a header line (`src/quran/display.ts`). Matches on letters ignoring diacritics (95:1 and 97:1 spell it with an extra shadda); shown text keeps the source marks and always re-joins to the exact stored ayah (tested for all 112 surahs).

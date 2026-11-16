@@ -46,12 +46,15 @@ Version: 0.1 (v1 scope) · Status: draft
   - Path: `~/.quran-for-claude-code/state` (contents: `busy <unix-ts>` or `idle <unix-ts>`).
   - `UserPromptSubmit` → write `busy`.
   - `Stop` and `SessionEnd` → write `idle`.
-- The extension watches that file (`fs.watch` with polling fallback, 1 s).
-- On `idle → busy` transition and extension enabled:
+- The extension polls that file every 1 s (`stat` only; the file is read when its mtime/size change). Polling is used instead of `fs.watch` because the hooks replace the file by rename, which `fs.watch` reports inconsistently across platforms and WSL, and a timer is needed for stale detection anyway.
+- A **new turn** is `idle → busy`, or `busy` with a newer timestamp (Claude Code does not run `Stop` when the user interrupts a turn, so `busy` can follow `busy`). A `busy` already present when VS Code starts is not a new turn.
+- On a new turn and extension enabled:
   - Reveal the panel with `preserveFocus: true` (never steal focus) if `autoReveal` is on.
   - If `advanceOnNewTurn` is on: continuous mode advances to the next ayah; random mode picks a new random ayah.
 - On `busy → idle`: no change to the panel (the user may keep reading). Status bar spinner stops.
 - Stale protection: a `busy` older than `staleBusyMinutes` (default 30) is treated as idle.
+- Multiple VS Code windows: all see the same state file. The bookmark lives in shared `globalState` and is re-read before every move, so a window cannot rewind progress made in another. Each turn's timestamp is recorded in `globalState` so only one window advances for it (best effort).
+- Panel reveal never takes focus: `WebviewView.show(true)` when the view exists, otherwise the workbench's `<viewId>.open` command with `{ preserveFocus: true }`. Never `.focus`.
 - If hooks are not installed, the extension still works as a manual reader; a one-time info message offers to install hooks.
 
 ### F5. Translations & "Translate selection"
