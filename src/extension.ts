@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { ClaudeIntegration } from './claude/integration';
 import { registerCommands } from './commands';
 import { ReaderController } from './controller';
 import { QuranStore } from './quran/store';
@@ -18,14 +19,18 @@ export function activate(context: vscode.ExtensionContext): void {
     set: (index) => void context.globalState.update(BOOKMARK_KEY, index),
   });
   const provider = new ReaderViewProvider(context.extensionUri, controller);
+  const statusBar = new StatusBar(controller);
+  const claude = new ClaudeIntegration(context.globalState, controller, provider, statusBar);
 
   context.subscriptions.push(
     controller,
     provider,
     vscode.window.registerWebviewViewProvider(ReaderViewProvider.viewId, provider),
-    new StatusBar(controller),
+    statusBar,
+    claude,
     ...registerCommands(controller, provider, store),
   );
+  void claude.start();
 }
 
 export function deactivate(): void {
