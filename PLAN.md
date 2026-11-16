@@ -72,11 +72,15 @@ Each phase ends in a working, testable state. Check items off as they land.
 
 ## Phase 8 — Publish
 - [x] Create publisher `WisangJatiAnggoro` and set `publisher` in `package.json` (extension ID `WisangJatiAnggoro.quran-for-claude-code`; replaces the temporary `local`, so local installs under `local.*` keep their own bookmark and should be uninstalled before installing the new ID).
-- [ ] Create Azure DevOps PAT (All accessible organizations, Marketplace → Manage) and run `npx vsce login WisangJatiAnggoro` (by the user; the token is never shared).
+- [ ] Re-check translation licences on tanzil.net/trans before the repo goes public.
+- [ ] Create the GitHub repo and push `main`.
 - [ ] Add `repository` to `package.json` and drop `--allow-missing-repository --no-rewrite-relative-links` from the `package` script, so README links point at the repo.
 - [x] `vsce package` → install `.vsix` locally → smoke test (installed in WSL and native Windows VS Code; used with Claude Code on both).
-- [ ] `vsce publish` (VS Code Marketplace) and `ovsx publish` (Open VSX).
-- [ ] Tag `v0.1.0`, GitHub release with `.vsix`.
+- [ ] Set version `0.1.0`; turn CHANGELOG "Unreleased" into `0.1.0`.
+- [ ] First Marketplace release: upload the `.vsix` at marketplace.visualstudio.com/manage (no token needed). Azure DevOps global PATs are retired on 2026-12-01, so `vsce login` with a PAT is not used.
+- [ ] Optional: Open VSX (open-vsx.org account via GitHub, Eclipse publisher agreement, namespace `WisangJatiAnggoro`, then `npx ovsx publish` with its own token).
+- [ ] Tag `v0.1.0`, GitHub release with the `.vsix`.
+- [ ] Optional later: GitHub Actions + Marketplace Trusted Publishing (`vsce publish --oidc`) so tagged releases publish automatically.
 
 ## Open questions
 1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
