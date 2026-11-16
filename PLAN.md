@@ -49,7 +49,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** end-to-end works in VS Code on Linux/WSL and macOS.
 
 ## Phase 6 — Translate selection
-- [ ] In webview: detect selection inside ayah element; context menu via `webview/context` contribution + `data-vscode-context`; keybinding `Ctrl/Cmd+Shift+T` when `focusedView == quranForClaudeCode.reader`.
+- [ ] In webview: detect selection inside ayah element; context menu via `webview/context` contribution + `data-vscode-context`; `S` key handled inside the webview (no global keybinding).
 - [ ] Map selection → ayah index(es) (`data-index` attributes) → show translation popover with translator label.
 - **Done when:** selecting Arabic text and invoking the command shows the right translation.
 
