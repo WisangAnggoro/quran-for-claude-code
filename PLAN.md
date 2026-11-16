@@ -74,7 +74,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [ ] Create Azure DevOps org + PAT (Marketplace → Manage), create publisher, set `publisher` in `package.json`.
   - Currently `publisher: "local"` for a local install (extension ID `local.quran-for-claude-code`). Changing it changes the extension ID, so the bookmark in `globalState` starts over.
 - [ ] Add `repository` to `package.json` and drop `--allow-missing-repository --no-rewrite-relative-links` from the `package` script, so README links point at the repo.
-- [ ] `vsce package` → install `.vsix` locally → smoke test.
+- [x] `vsce package` → install `.vsix` locally → smoke test (installed in WSL and native Windows VS Code; used with Claude Code on both).
 - [ ] `vsce publish` (VS Code Marketplace) and `ovsx publish` (Open VSX).
 - [ ] Tag `v0.1.0`, GitHub release with `.vsix`.
 
