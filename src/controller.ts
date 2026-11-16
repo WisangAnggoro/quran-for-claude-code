@@ -73,10 +73,6 @@ export class ReaderController implements vscode.Disposable {
     return { mode: this.settings.mode, bookmarkRef: index.formatRef(r.bookmark) };
   }
 
-  get isLoaded(): boolean {
-    return this.readerP !== undefined;
-  }
-
   async toggleMode(): Promise<void> {
     await updateSetting('mode', this.settings.mode === 'continuous' ? 'random' : 'continuous');
   }
