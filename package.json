@@ -69,6 +69,16 @@
         "command": "quranForClaudeCode.resetBookmark",
         "title": "Reset Bookmark to Al-Fatihah",
         "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.installHooks",
+        "title": "Install Claude Code Hooks",
+        "category": "Quran"
+      },
+      {
+        "command": "quranForClaudeCode.uninstallHooks",
+        "title": "Uninstall Claude Code Hooks",
+        "category": "Quran"
       }
     ],
     "configuration": {

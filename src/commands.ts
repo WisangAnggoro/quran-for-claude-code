@@ -1,6 +1,7 @@
-// Command Palette commands (SPEC §3). Hooks, translate-selection and About arrive in later phases.
+// Command Palette commands (SPEC §3). Translate-selection and About arrive in later phases.
 
 import * as vscode from 'vscode';
+import { installHooksCommand, uninstallHooksCommand } from './claude/hookCommands';
 import { readExtensionSettings, setEnabled } from './config';
 import type { ReaderController } from './controller';
 import type { QuranStore } from './quran/store';
@@ -47,6 +48,8 @@ export function registerCommands(
       await controller.goTo(r.index);
       await show();
     }),
+    reg('installHooks', installHooksCommand),
+    reg('uninstallHooks', uninstallHooksCommand),
     reg('resetBookmark', async () => {
       const { bookmarkRef } = await controller.describe();
       const current = bookmarkRef ? ` Your bookmark is at ${bookmarkRef}.` : '';

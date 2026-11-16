@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { maybeOfferHooks } from './claude/hookCommands';
 import { ClaudeIntegration } from './claude/integration';
 import { registerCommands } from './commands';
 import { ReaderController } from './controller';
@@ -31,6 +32,9 @@ export function activate(context: vscode.ExtensionContext): void {
     ...registerCommands(controller, provider, store),
   );
   void claude.start();
+  // Delay so the offer never competes with VS Code's own startup notifications.
+  const offer = setTimeout(() => void maybeOfferHooks(context.globalState), 5000);
+  context.subscriptions.push({ dispose: () => clearTimeout(offer) });
 }
 
 export function deactivate(): void {
