@@ -2,6 +2,7 @@
   "name": "quran-for-claude-code",
   "displayName": "Quran for Claude Code (Unofficial)",
   "description": "Unofficial community extension. Not affiliated with or endorsed by Anthropic. Read the Quran while Claude Code works — totally offline.",
+  "icon": "media/icon.png",
   "version": "0.0.1",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
@@ -175,7 +176,8 @@
     "vscode:prepublish": "npm run typecheck && node scripts/esbuild.mjs --production",
     "lint": "eslint .",
     "build:data": "node scripts/build-data.mjs",
-    "test": "mocha"
+    "test": "mocha",
+    "build:icon": "node scripts/build-icon.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
