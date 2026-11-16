@@ -24,7 +24,8 @@ Version: 0.1 (v1 scope) · Status: draft
   - For ayah 1 of every surah except 1 and 9, the basmalah that Tanzil prefixes to the text is shown as a separate centred header line. This is display-only: both lines are exact substrings of the stored ayah and re-join to it byte-for-byte.
   - Translation below (toggleable, see F5), always followed by its label, e.g. `English — Saheeh International (translation)`.
 - Buttons: **Prev**, **Next**, **Mode** toggle (Random / Continuous), **Show/Hide translation**.
-- Keyboard (handled inside the webview, so only active when the panel is focused; no global keybindings): `←` next, `→` prev (RTL-natural), `T` toggle translation, `S` translate selection.
+- Keyboard (handled inside the webview, so only active when the panel is focused; no global keybindings): arrow keys follow `navigationDirection` (`rtl` default: `←` next, `→` prev; `ltr`: `→` next, `←` prev), `T` toggle translation, `S` translate selection.
+- `navigationDirection` also sets the button layout: `rtl` shows `← Next` then `Prev →`; `ltr` shows `← Prev` then `Next →`. The buttons are swapped in the DOM so Tab order matches.
 - Follows VS Code theme colours via CSS variables (`--vscode-*`).
 
 ### F2. On/Off toggle (status bar)
@@ -124,6 +125,7 @@ Version: 0.1 (v1 scope) · Status: draft
 | `quranForClaudeCode.autoReveal` | boolean | `true` | Reveal panel when Claude starts |
 | `quranForClaudeCode.advanceOnNewTurn` | boolean | `true` | |
 | `quranForClaudeCode.arabicFontSize` | number | `28` | px |
+| `quranForClaudeCode.navigationDirection` | `rtl` \| `ltr` | `rtl` | Next on the left with ← (`rtl`) or on the right with → (`ltr`) |
 | `quranForClaudeCode.staleBusyMinutes` | number | `30` | |
 
 ## 5. State (persisted)
