@@ -37,6 +37,8 @@ Version: 0.1 (v1 scope) · Status: draft
 - **Continuous** (default): shows the bookmark ayah. **Next** advances one ayah and moves the bookmark. **Prev** goes back one ayah (also moves the bookmark). Wraps from 114:6 to 1:1.
 - **Random**: shows a uniformly random ayah. **Next** picks a new random ayah. **Prev** walks back through a session history of up to 50 random ayat. Random mode never changes the continuous bookmark.
 - Switching modes keeps both states independent.
+- In random mode, **Next** after going back with **Prev** walks forward through the history before picking new ayat (browser-like). A new random ayah is never the one currently shown.
+- **Go to Ayah…** follows the current mode: in continuous mode it moves the bookmark; in random mode it adds the ayah to the random history (dropping any forward entries) and leaves the bookmark alone.
 
 ### F4. Claude Code integration (auto show)
 - Claude Code reports activity through **hooks** that write a small state file:

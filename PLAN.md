@@ -20,11 +20,11 @@ Each phase ends in a working, testable state. Check items off as they land.
 - **Done when:** `npm run build:data` produces the files and validation passes. ✅
 
 ## Phase 2 — Reader core (no UI)
-- [ ] `src/quran/index.ts`: `toRef(index) → {surah, ayah}`, `fromRef(surah, ayah) → index`, `parseRef("2:255" | "al-baqarah 255")`.
-- [ ] `src/quran/store.ts`: lazy loads text/meta/translation JSON.
-- [ ] `src/reader.ts`: state machine for continuous + random modes, bookmark in `globalState`, random history (cap 50), wrap-around.
-- [ ] Unit tests (mocha) for index math, parsing, wrap, random history.
-- **Done when:** tests pass.
+- [x] `src/quran/index.ts`: `toRef(index) → {surah, ayah}`, `fromRef(surah, ayah) → index`, `parseRef("2:255" | "al-baqarah 255")`.
+- [x] `src/quran/store.ts`: lazy loads text/meta/translation JSON.
+- [x] `src/reader.ts`: state machine for continuous + random modes, bookmark in `globalState`, random history (cap 50), wrap-around.
+- [x] Unit tests (mocha) for index math, parsing, wrap, random history.
+- **Done when:** tests pass. ✅
 
 ## Phase 3 — Webview panel
 - [ ] Contribute `viewsContainers.panel` + `views` (`quranForClaudeCode.reader`, type `webview`).
