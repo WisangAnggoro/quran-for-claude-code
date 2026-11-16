@@ -27,6 +27,7 @@
     "typecheck": "tsc --noEmit",
     "vscode:prepublish": "npm run typecheck && node scripts/esbuild.mjs --production",
     "lint": "eslint .",
+    "build:data": "node scripts/build-data.mjs",
     "test": "mocha \"test/**/*.test.mjs\""
   },
   "devDependencies": {

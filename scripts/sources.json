@@ -1,0 +1,38 @@
+{
+  "$comment": "Raw inputs for scripts/build-data.mjs. Download each file manually into data-src/ (git-ignored), then run `npm run build:data -- --record-hashes` once to fill in sha256. After that, build:data refuses to run if any file differs.",
+  "quran": {
+    "file": "quran-uthmani.txt",
+    "url": "https://tanzil.net/download/",
+    "options": "Quran type: Uthmani; output: Text (with aya numbers); pause marks, sajdah signs, rub-el-hizb signs: on",
+    "version": null,
+    "sha256": null
+  },
+  "metadata": {
+    "file": "quran-data.xml",
+    "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+    "version": null,
+    "sha256": null
+  },
+  "translations": [
+    {
+      "id": "id.indonesian",
+      "file": "id.indonesian.txt",
+      "language": "Indonesian",
+      "translator": "Kementerian Agama RI",
+      "url": "https://tanzil.net/trans/",
+      "options": "Translation: Indonesian / Kementerian Agama RI; format: Text (with aya numbers)",
+      "version": null,
+      "sha256": null
+    },
+    {
+      "id": "en.sahih",
+      "file": "en.sahih.txt",
+      "language": "English",
+      "translator": "Saheeh International",
+      "url": "https://tanzil.net/trans/",
+      "options": "Translation: English / Saheeh International; format: Text (with aya numbers)",
+      "version": null,
+      "sha256": null
+    }
+  ]
+}
