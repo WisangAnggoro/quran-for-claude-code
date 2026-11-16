@@ -20,6 +20,41 @@ body {
   display: none !important;
 }
 
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  column-gap: 32px;
+}
+
+/* Wide panels (the usual bottom-panel shape): translation left, Arabic right. */
+@media (min-width: 720px) {
+  .content.two-col {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-areas: 'side arabic';
+  }
+  .content.two-col .arabic-col {
+    grid-area: arabic;
+  }
+  .content.two-col .side-col {
+    grid-area: side;
+  }
+}
+
+.mode-label {
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  color: var(--vscode-badge-foreground);
+  background: var(--vscode-badge-background);
+}
+
 .heading {
   display: flex;
   justify-content: space-between;
@@ -51,7 +86,7 @@ body {
 .translation {
   border-left: 2px solid var(--vscode-textBlockQuote-border, var(--vscode-focusBorder));
   padding-left: 10px;
-  margin: 4px 0 12px;
+  margin: 8px 0;
 }
 
 .translation-text {
@@ -70,6 +105,7 @@ body {
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
+  margin-top: 8px;
 }
 
 .spacer {
@@ -111,7 +147,7 @@ button:disabled {
 
 .popover {
   position: relative;
-  margin: 0 0 12px;
+  margin: 8px 0;
   padding: 8px 32px 8px 12px;
   color: var(--vscode-editorHoverWidget-foreground, var(--vscode-foreground));
   background: var(--vscode-editorHoverWidget-background);
@@ -143,7 +179,6 @@ button:disabled {
 }
 
 .credit {
-  margin-top: 10px;
   font-size: 0.85em;
   color: var(--vscode-descriptionForeground);
 }

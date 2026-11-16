@@ -18,9 +18,8 @@
     translationLabel: $('translation-label'),
     next: $('next'),
     prev: $('prev'),
-    mode: $('mode'),
-    toggleTranslation: $('toggle-translation'),
-    chooseTranslation: $('choose-translation'),
+    content: $('content'),
+    modeLabel: $('mode-label'),
     popover: $('popover'),
     popoverItems: $('popover-items'),
     popoverLabel: $('popover-label'),
@@ -29,6 +28,13 @@
   };
 
   const send = (type) => vscode.postMessage({ type });
+
+  let translationAvailable = false;
+
+  /** Two columns only when there is something to put beside the Arabic. */
+  function updateColumns() {
+    el.content.classList.toggle('two-col', !el.translation.hidden || !el.popover.hidden);
+  }
 
   // 'rtl': ← Next on the left, ← = next. 'ltr': Next → on the right, → = next.
   let direction = 'rtl';
@@ -63,10 +69,9 @@
     el.translationText.textContent = p.translation ? p.translation.text : '';
     el.translationLabel.textContent = p.translation ? p.translation.label : '';
 
-    el.mode.textContent = p.mode === 'random' ? 'Mode: Random' : 'Mode: Continuous';
-    el.chooseTranslation.textContent = p.translationName + ' ▾';
-    el.toggleTranslation.disabled = !p.translationAvailable;
-    el.toggleTranslation.textContent = p.showTranslation ? 'Hide translation' : 'Show translation';
+    el.modeLabel.textContent = p.mode === 'random' ? 'Random' : 'Continuous';
+    translationAvailable = p.translationAvailable;
+    updateColumns();
 
     el.status.hidden = true;
     el.reader.hidden = false;
@@ -76,6 +81,7 @@
     el.popover.hidden = true;
     el.popoverItems.textContent = '';
     el.popoverLabel.textContent = '';
+    updateColumns();
   }
 
   function showPopover(items, label) {
@@ -93,6 +99,7 @@
     }
     el.popoverLabel.textContent = label || '';
     el.popover.hidden = false;
+    updateColumns();
   }
 
   /** Global ayah indices of the Arabic elements the current selection touches. */
@@ -136,9 +143,6 @@
 
   el.next.addEventListener('click', () => send('next'));
   el.prev.addEventListener('click', () => send('prev'));
-  el.mode.addEventListener('click', () => send('toggleMode'));
-  el.toggleTranslation.addEventListener('click', () => send('toggleTranslation'));
-  el.chooseTranslation.addEventListener('click', () => send('chooseTranslation'));
   el.popoverClose.addEventListener('click', hidePopover);
   el.about.addEventListener('click', () => send('about'));
 
@@ -150,7 +154,7 @@
     if (e.key === forward) send('next');
     else if (e.key === back) send('prev');
     else if (e.key === 't' || e.key === 'T') {
-      if (!el.toggleTranslation.disabled) send('toggleTranslation');
+      if (translationAvailable) send('toggleTranslation');
     } else if (e.key === 's' || e.key === 'S') translateSelection();
     else if (e.key === 'Escape' && !el.popover.hidden) hidePopover();
     else return;

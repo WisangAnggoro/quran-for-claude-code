@@ -11,39 +11,46 @@
 <body>
   <main id="reader" aria-live="polite" hidden>
     <header class="heading">
-      <span id="surah-latin" class="surah-latin"></span>
+      <span>
+        <span id="surah-latin" class="surah-latin"></span>
+        <span id="mode-label" class="mode-label"></span>
+      </span>
       <span id="surah-arabic" class="surah-arabic" lang="ar" dir="rtl"></span>
     </header>
 
-    <p id="basmalah" class="basmalah" lang="ar" dir="rtl" data-index="0"
-       data-vscode-context='{"webviewSection":"arabic"}' hidden></p>
-    <p id="arabic" class="arabic" lang="ar" dir="rtl"
-       data-vscode-context='{"webviewSection":"arabic"}'></p>
+    <!-- Wide panel: translation (left) beside Arabic (right). Narrow: stacked. -->
+    <div id="content" class="content">
+      <div class="arabic-col">
+        <p id="basmalah" class="basmalah" lang="ar" dir="rtl" data-index="0"
+           data-vscode-context='{"webviewSection":"arabic"}' hidden></p>
+        <p id="arabic" class="arabic" lang="ar" dir="rtl"
+           data-vscode-context='{"webviewSection":"arabic"}'></p>
+      </div>
 
-    <aside id="popover" class="popover" role="dialog" aria-label="Translation of selection" hidden>
-      <button id="popover-close" type="button" class="popover-close" aria-label="Close">×</button>
-      <div id="popover-items"></div>
-      <p id="popover-label" class="translation-label"></p>
-    </aside>
+      <div class="side-col">
+        <section id="translation" class="translation" hidden>
+          <p id="translation-text" class="translation-text"></p>
+          <p id="translation-label" class="translation-label"></p>
+        </section>
 
-    <section id="translation" class="translation" hidden>
-      <p id="translation-text" class="translation-text"></p>
-      <p id="translation-label" class="translation-label"></p>
-    </section>
+        <aside id="popover" class="popover" role="dialog" aria-label="Translation of selection" hidden>
+          <button id="popover-close" type="button" class="popover-close" aria-label="Close">×</button>
+          <div id="popover-items"></div>
+          <p id="popover-label" class="translation-label"></p>
+        </aside>
+      </div>
+    </div>
 
+    <!-- Mode and translation controls live in the panel title bar (package.json view/title). -->
     <nav class="controls" aria-label="Reader controls">
       <button id="next" type="button" title="Next ayah (←)">← Next</button>
       <button id="prev" type="button" class="secondary" title="Previous ayah (→)">Prev →</button>
       <span class="spacer"></span>
-      <button id="mode" type="button" class="secondary" title="Switch mode"></button>
-      <button id="choose-translation" type="button" class="secondary" title="Choose translation"></button>
-      <button id="toggle-translation" type="button" class="secondary" title="Show/hide translation (T)"></button>
+      <span class="credit">
+        Quran text: Tanzil Project (tanzil.net), CC BY 3.0 ·
+        <button id="about" type="button" class="link">About &amp; attribution</button>
+      </span>
     </nav>
-
-    <footer class="credit">
-      Quran text: Tanzil Project (tanzil.net), CC BY 3.0 ·
-      <button id="about" type="button" class="link">About &amp; attribution</button>
-    </footer>
   </main>
 
   <p id="status" class="status">Loading…</p>
