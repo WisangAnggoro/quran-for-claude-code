@@ -3,9 +3,10 @@
 import * as vscode from 'vscode';
 import { showAbout } from './about';
 import { installHooksCommand, uninstallHooksCommand } from './claude/hookCommands';
-import { readExtensionSettings, setEnabled } from './config';
+import { readExtensionSettings, readSettings, setEnabled, updateSetting } from './config';
+import { TRANSLATION_CREDITS, TRANSLATION_IDS, type QuranStore } from './quran/store';
+import type { TranslationSetting } from './session';
 import type { ReaderController } from './controller';
-import type { QuranStore } from './quran/store';
 import type { ReaderViewProvider } from './view/ReaderViewProvider';
 
 export function registerCommands(
@@ -51,6 +52,21 @@ export function registerCommands(
       await show();
     }),
     reg('translateSelection', () => provider.requestTranslateSelection()),
+    reg('chooseTranslation', async () => {
+      const current = readSettings().translation;
+      type Item = vscode.QuickPickItem & { value: TranslationSetting };
+      const items: Item[] = [
+        ...TRANSLATION_IDS.map((id) => ({
+          value: id,
+          label: TRANSLATION_CREDITS[id].language,
+          description: TRANSLATION_CREDITS[id].translator,
+        })),
+        { value: 'none', label: 'No translation' },
+      ];
+      for (const i of items) if (i.value === current) i.detail = 'Current';
+      const pick = await vscode.window.showQuickPick(items, { title: 'Quran: Choose Translation' });
+      if (pick && pick.value !== current) await updateSetting('translation', pick.value);
+    }),
     reg('about', () => showAbout(extensionUri)),
     reg('installHooks', installHooksCommand),
     reg('uninstallHooks', uninstallHooksCommand),

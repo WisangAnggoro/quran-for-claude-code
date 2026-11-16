@@ -2,7 +2,14 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { QuranStore } from '../src/quran/store';
-import { buildPayload, clampFontSize, resolveTranslation, translateSelection, type ReaderSettings } from '../src/session';
+import {
+  buildPayload,
+  clampFontSize,
+  resolveTranslation,
+  translateSelection,
+  translationName,
+  type ReaderSettings,
+} from '../src/session';
 
 const dataDir = join(__dirname, '..', 'data');
 const ayat: string[] = JSON.parse(readFileSync(join(dataDir, 'quran-uthmani.json'), 'utf8')).ayat;
@@ -78,5 +85,14 @@ describe('translateSelection', () => {
   it('returns undefined for nothing valid', async () => {
     assert.equal(await translateSelection(store, [], 'en.sahih'), undefined);
     assert.equal(await translateSelection(store, 'nope', 'en.sahih'), undefined);
+  });
+});
+
+describe('translationName', () => {
+  it('names each choice for the panel button', async () => {
+    assert.equal(translationName('en.sahih'), 'English');
+    assert.equal(translationName('id.indonesian'), 'Bahasa Indonesia');
+    assert.equal(translationName('none'), 'No translation');
+    assert.equal((await buildPayload(store, 0, { ...base, translation: 'id.indonesian' })).translationName, 'Bahasa Indonesia');
   });
 });

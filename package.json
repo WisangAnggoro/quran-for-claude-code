@@ -72,6 +72,11 @@
         "category": "Quran"
       },
       {
+        "command": "quranForClaudeCode.chooseTranslation",
+        "title": "Choose Translation…",
+        "category": "Quran"
+      },
+      {
         "command": "quranForClaudeCode.resetBookmark",
         "title": "Reset Bookmark to Al-Fatihah",
         "category": "Quran"

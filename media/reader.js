@@ -20,6 +20,7 @@
     prev: $('prev'),
     mode: $('mode'),
     toggleTranslation: $('toggle-translation'),
+    chooseTranslation: $('choose-translation'),
     popover: $('popover'),
     popoverItems: $('popover-items'),
     popoverLabel: $('popover-label'),
@@ -47,6 +48,7 @@
     el.translationLabel.textContent = p.translation ? p.translation.label : '';
 
     el.mode.textContent = p.mode === 'random' ? 'Mode: Random' : 'Mode: Continuous';
+    el.chooseTranslation.textContent = p.translationName + ' ▾';
     el.toggleTranslation.disabled = !p.translationAvailable;
     el.toggleTranslation.textContent = p.showTranslation ? 'Hide translation' : 'Show translation';
 
@@ -120,6 +122,7 @@
   el.prev.addEventListener('click', () => send('prev'));
   el.mode.addEventListener('click', () => send('toggleMode'));
   el.toggleTranslation.addEventListener('click', () => send('toggleTranslation'));
+  el.chooseTranslation.addEventListener('click', () => send('chooseTranslation'));
   el.popoverClose.addEventListener('click', hidePopover);
   el.about.addEventListener('click', () => send('about'));
 

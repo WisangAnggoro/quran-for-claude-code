@@ -28,6 +28,8 @@ export interface RenderPayload {
   text: string;
   translation?: { text: string; label: string };
   translationAvailable: boolean;
+  /** Short name of the selected translation for the panel's chooser button. */
+  translationName: string;
   showTranslation: boolean;
   mode: Mode;
   arabicFontSize: number;
@@ -38,6 +40,10 @@ export const DEFAULT_TRANSLATION: TranslationId = 'en.sahih';
 /** The configured translation, or the default (English) if the value is missing or unknown. */
 export function resolveTranslation(value: unknown): TranslationSetting {
   return value === 'none' || isTranslationId(value) ? value : DEFAULT_TRANSLATION;
+}
+
+export function translationName(t: TranslationSetting): string {
+  return t === 'none' ? 'No translation' : TRANSLATION_CREDITS[t].language;
 }
 
 export function clampFontSize(value: unknown): number {
@@ -70,6 +76,7 @@ export async function buildPayload(store: QuranStore, index: number, settings: R
     text: parts.body,
     translation,
     translationAvailable,
+    translationName: translationName(settings.translation),
     showTranslation: settings.showTranslation,
     mode: settings.mode,
     arabicFontSize: clampFontSize(settings.arabicFontSize),

@@ -7,7 +7,7 @@ import * as vscode from 'vscode';
 import type { ReaderController } from '../controller';
 
 type Incoming =
-  | { type: 'ready' | 'next' | 'prev' | 'toggleMode' | 'toggleTranslation' | 'about' }
+  | { type: 'ready' | 'next' | 'prev' | 'toggleMode' | 'toggleTranslation' | 'chooseTranslation' | 'about' }
   | { type: 'translateSelection'; indices?: unknown };
 const INCOMING = new Set<string>([
   'ready',
@@ -16,6 +16,7 @@ const INCOMING = new Set<string>([
   'toggleMode',
   'toggleTranslation',
   'translateSelection',
+  'chooseTranslation',
   'about',
 ]);
 
@@ -61,6 +62,9 @@ export class ReaderViewProvider implements vscode.WebviewViewProvider, vscode.Di
         return this.controller.toggleTranslation();
       case 'about':
         await vscode.commands.executeCommand('quranForClaudeCode.about');
+        return;
+      case 'chooseTranslation':
+        await vscode.commands.executeCommand('quranForClaudeCode.chooseTranslation');
         return;
       case 'translateSelection': {
         const payload = (await this.controller.translateSelection(m.indices)) ?? null;
