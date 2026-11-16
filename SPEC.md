@@ -66,9 +66,24 @@ Version: 0.1 (v1 scope) · Status: draft
   2. On confirm, creates a backup `settings.json.bak-<timestamp>`, then **merges** hook entries (never overwrites existing hooks).
   3. Entries are tagged so they can be identified (command string contains `quran-for-claude-code`). Installing twice is a no-op.
 - Command `Quran: Uninstall Claude Code Hooks` removes only our tagged entries.
-- Hook command (POSIX shell, used by Claude Code on macOS/Linux/WSL and Git Bash on Windows):
-  ```sh
-  mkdir -p "$HOME/.quran-for-claude-code" && printf 'busy %s' "$(date +%s)" > "$HOME/.quran-for-claude-code/state" # quran-for-claude-code
+- Hook commands (POSIX shell, used by Claude Code on macOS/Linux/WSL and Git Bash on Windows). Each writes to a temp file then renames, so the watcher never reads a half-written file. The trailing `# quran-for-claude-code` comment is the tag used for idempotency and uninstall.
+  - `UserPromptSubmit` (busy):
+    ```sh
+    d="$HOME/.quran-for-claude-code"; mkdir -p "$d" && printf 'busy %s' "$(date +%s)" > "$d/state.tmp" && mv -f "$d/state.tmp" "$d/state" # quran-for-claude-code
+    ```
+  - `Stop` and `SessionEnd` (idle):
+    ```sh
+    d="$HOME/.quran-for-claude-code"; mkdir -p "$d" && printf 'idle %s' "$(date +%s)" > "$d/state.tmp" && mv -f "$d/state.tmp" "$d/state" # quran-for-claude-code
+    ```
+- Shape merged into `~/.claude/settings.json` (appended to any existing arrays, never replacing them):
+  ```json
+  {
+    "hooks": {
+      "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "<busy command>" }] }],
+      "Stop":             [{ "hooks": [{ "type": "command", "command": "<idle command>" }] }],
+      "SessionEnd":       [{ "hooks": [{ "type": "command", "command": "<idle command>" }] }]
+    }
+  }
   ```
 
 ## 3. Commands
