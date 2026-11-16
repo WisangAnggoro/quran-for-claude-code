@@ -63,9 +63,34 @@
         "category": "Quran"
       },
       {
+        "command": "quranForClaudeCode.useRandomMode",
+        "title": "Switch to Random Mode",
+        "category": "Quran",
+        "icon": "$(list-ordered)"
+      },
+      {
+        "command": "quranForClaudeCode.useContinuousMode",
+        "title": "Switch to Continuous Mode",
+        "category": "Quran",
+        "icon": "$(shuffle)"
+      },
+      {
+        "command": "quranForClaudeCode.showTranslation",
+        "title": "Show Translation",
+        "category": "Quran",
+        "icon": "$(eye-closed)"
+      },
+      {
+        "command": "quranForClaudeCode.hideTranslation",
+        "title": "Hide Translation",
+        "category": "Quran",
+        "icon": "$(eye)"
+      },
+      {
         "command": "quranForClaudeCode.goTo",
         "title": "Go to Ayah…",
-        "category": "Quran"
+        "category": "Quran",
+        "icon": "$(search)"
       },
       {
         "command": "quranForClaudeCode.translateSelection",
@@ -75,7 +100,8 @@
       {
         "command": "quranForClaudeCode.chooseTranslation",
         "title": "Choose Translation…",
-        "category": "Quran"
+        "category": "Quran",
+        "icon": "$(globe)"
       },
       {
         "command": "quranForClaudeCode.resetBookmark",
@@ -95,7 +121,8 @@
       {
         "command": "quranForClaudeCode.about",
         "title": "About & Attribution",
-        "category": "Quran"
+        "category": "Quran",
+        "icon": "$(info)"
       }
     ],
     "configuration": {
@@ -189,6 +216,74 @@
         {
           "command": "quranForClaudeCode.translateSelection",
           "when": "view.quranForClaudeCode.reader.visible"
+        },
+        {
+          "command": "quranForClaudeCode.useRandomMode",
+          "when": "false"
+        },
+        {
+          "command": "quranForClaudeCode.useContinuousMode",
+          "when": "false"
+        },
+        {
+          "command": "quranForClaudeCode.showTranslation",
+          "when": "false"
+        },
+        {
+          "command": "quranForClaudeCode.hideTranslation",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "quranForClaudeCode.goTo",
+          "when": "view == quranForClaudeCode.reader",
+          "group": "navigation@1"
+        },
+        {
+          "command": "quranForClaudeCode.useRandomMode",
+          "when": "view == quranForClaudeCode.reader && quranForClaudeCode.mode != random",
+          "group": "navigation@2"
+        },
+        {
+          "command": "quranForClaudeCode.useContinuousMode",
+          "when": "view == quranForClaudeCode.reader && quranForClaudeCode.mode == random",
+          "group": "navigation@2"
+        },
+        {
+          "command": "quranForClaudeCode.chooseTranslation",
+          "when": "view == quranForClaudeCode.reader",
+          "group": "navigation@3"
+        },
+        {
+          "command": "quranForClaudeCode.hideTranslation",
+          "when": "view == quranForClaudeCode.reader && quranForClaudeCode.translationAvailable && quranForClaudeCode.showTranslation",
+          "group": "navigation@4"
+        },
+        {
+          "command": "quranForClaudeCode.showTranslation",
+          "when": "view == quranForClaudeCode.reader && quranForClaudeCode.translationAvailable && !quranForClaudeCode.showTranslation",
+          "group": "navigation@4"
+        },
+        {
+          "command": "quranForClaudeCode.resetBookmark",
+          "when": "view == quranForClaudeCode.reader",
+          "group": "1_reader@1"
+        },
+        {
+          "command": "quranForClaudeCode.installHooks",
+          "when": "view == quranForClaudeCode.reader",
+          "group": "2_hooks@1"
+        },
+        {
+          "command": "quranForClaudeCode.uninstallHooks",
+          "when": "view == quranForClaudeCode.reader",
+          "group": "2_hooks@2"
+        },
+        {
+          "command": "quranForClaudeCode.about",
+          "when": "view == quranForClaudeCode.reader",
+          "group": "3_about@1"
         }
       ]
     }

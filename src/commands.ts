@@ -33,6 +33,11 @@ export function registerCommands(
       await show();
     }),
     reg('toggleMode', () => controller.toggleMode()),
+    // Title-bar pairs: one of each pair is shown, depending on the current setting.
+    reg('useRandomMode', () => updateSetting('mode', 'random')),
+    reg('useContinuousMode', () => updateSetting('mode', 'continuous')),
+    reg('showTranslation', () => updateSetting('showTranslation', true)),
+    reg('hideTranslation', () => updateSetting('showTranslation', false)),
     reg('goTo', async () => {
       const index = await store.index();
       const input = await vscode.window.showInputBox({

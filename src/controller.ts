@@ -3,7 +3,7 @@
 // toggles write the setting, and the configuration-change event re-renders.
 
 import * as vscode from 'vscode';
-import { readSettings, SECTION, updateSetting } from './config';
+import { readSettings, SECTION, syncContextKeys, updateSetting } from './config';
 import type { QuranStore } from './quran/store';
 import { Reader, type BookmarkStore } from './reader';
 import {
@@ -27,11 +27,13 @@ export class ReaderController implements vscode.Disposable {
     private readonly store: QuranStore,
     private readonly bookmarks: BookmarkStore,
   ) {
+    syncContextKeys(this.settings);
     this.subscriptions = [
       this.changed,
       vscode.workspace.onDidChangeConfiguration((e) => {
         if (!e.affectsConfiguration(SECTION)) return;
         this.settings = readSettings();
+        syncContextKeys(this.settings);
         if (!this.readerP) return this.changed.fire();
         void this.readerP.then((r) => {
           r.setMode(this.settings.mode);

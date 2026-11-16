@@ -16,6 +16,16 @@ export function readSettings(): ReaderSettings {
   };
 }
 
+/**
+ * Mirror reader settings into context keys so the panel title bar shows the right
+ * toggle icons (e.g. eye vs eye-closed). See `menus.view/title` in package.json.
+ */
+export function syncContextKeys(s: ReaderSettings): void {
+  void vscode.commands.executeCommand('setContext', 'quranForClaudeCode.mode', s.mode);
+  void vscode.commands.executeCommand('setContext', 'quranForClaudeCode.showTranslation', s.showTranslation);
+  void vscode.commands.executeCommand('setContext', 'quranForClaudeCode.translationAvailable', s.translation !== 'none');
+}
+
 export function updateSetting(key: keyof ReaderSettings, value: unknown): Thenable<void> {
   return vscode.workspace.getConfiguration(SECTION).update(key, value, vscode.ConfigurationTarget.Global);
 }
