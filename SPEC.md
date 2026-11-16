@@ -140,7 +140,8 @@ Stored in `context.globalState` (survives restarts, shared across windows):
 
 ## 8. Platforms
 
-- Windows, macOS, Linux, WSL / Remote. In Remote-WSL/SSH, the extension runs on the **UI side** (`"extensionKind": ["ui", "workspace"]`) — open question: hooks run where Claude Code runs, so the state file must be read on that side. See PLAN.md open questions.
+- Windows, macOS, Linux, WSL / Remote.
+- `"extensionKind": ["workspace", "ui"]` — prefer the **workspace side**. Claude Code (and therefore its hooks) runs where the workspace lives, so in Remote-WSL/SSH/Containers the state file `~/.quran-for-claude-code/state` and `~/.claude/settings.json` are on the remote machine; the extension must run there to see them. Webviews still render on the UI side, which is fine because all data is shipped to the webview via `asWebviewUri`/messages.
 
 ## 9. Attribution & licensing
 

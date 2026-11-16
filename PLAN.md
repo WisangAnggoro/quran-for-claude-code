@@ -69,7 +69,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [ ] Tag `v0.1.0`, GitHub release with `.vsix`.
 
 ## Open questions
-1. **Remote / WSL:** Claude Code hooks write the state file on the machine where Claude Code runs. If VS Code is remote (WSL/SSH), the extension must run on the workspace side to see it — decide `extensionKind` order and test.
+1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
 2. **Windows native:** confirm the hook command works under Claude Code on Windows (Git Bash); otherwise ship a PowerShell variant.
 3. **Multiple concurrent Claude sessions:** v1 uses a single state file (last writer wins). Consider per-session files keyed by `session_id` from hook stdin later.
 4. **Font choice:** KFGQPC HAFS (most authentic for Uthmani text) vs Amiri Quran (OFL, clearer license). Confirm KFGQPC redistribution terms.
