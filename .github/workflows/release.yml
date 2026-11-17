@@ -1,0 +1,68 @@
+# Publishes a release when a version tag (e.g. v0.1.1) is pushed:
+#   VS Code Marketplace → Open VSX → GitHub release, all from the same .vsix.
+#
+# No stored tokens. Both stores use Trusted Publishing: GitHub issues a short-lived
+# OIDC token to this workflow (id-token: write), and each store accepts it only for
+# repository WisangAnggoro/quran-for-claude-code and workflow file release.yml.
+#
+# Release steps: bump "version" in package.json, add a "## [x.y.z]" CHANGELOG section,
+# commit, then: git tag vX.Y.Z && git push origin vX.Y.Z
+
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # Trusted Publishing to the Marketplace and Open VSX
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Check tag matches package.json version
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $VERSION"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "VSIX=quran-for-claude-code-$VERSION.vsix" >> "$GITHUB_ENV"
+
+      - name: Release notes from CHANGELOG
+        run: node scripts/changelog-section.mjs "$VERSION" > release-notes.md
+
+      - run: npm run lint
+      - run: npm test
+
+      - name: Package
+        run: npx vsce package --out "$VSIX"
+
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish --oidc --packagePath "$VSIX"
+
+      - name: Publish to Open VSX
+        run: npx ovsx publish --trusted-publishing --packagePath "$VSIX"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" "$VSIX" --title "$GITHUB_REF_NAME" --notes-file release-notes.md --verify-tag
