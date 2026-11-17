@@ -212,6 +212,18 @@
         }
       }
     },
+    "colors": [
+      {
+        "id": "quranForClaudeCode.statusBarBusyForeground",
+        "description": "Colour of the Quran status bar item while Claude Code is working.",
+        "defaults": {
+          "dark": "#E3B341",
+          "light": "#9A6700",
+          "highContrast": "#FFD700",
+          "highContrastLight": "#7A5200"
+        }
+      }
+    ],
     "menus": {
       "webview/context": [
         {

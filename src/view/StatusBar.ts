@@ -1,7 +1,10 @@
 import * as vscode from 'vscode';
 import { readExtensionSettings } from '../config';
 import type { ReaderController } from '../controller';
-import { statusText, statusTooltip } from './statusText';
+import { showsBusy, statusText, statusTooltip } from './statusText';
+
+/** Contributed in package.json (contributes.colors); users can override it. */
+const BUSY_COLOR = new vscode.ThemeColor('quranForClaudeCode.statusBarBusyForeground');
 
 export class StatusBar implements vscode.Disposable {
   private readonly item = vscode.window.createStatusBarItem(
@@ -39,6 +42,7 @@ export class StatusBar implements vscode.Disposable {
     const state = { enabled, busy: this.busy, mode, bookmarkRef };
     this.item.text = statusText(state);
     this.item.tooltip = statusTooltip(state);
+    this.item.color = showsBusy(state) ? BUSY_COLOR : undefined;
   }
 
   dispose(): void {

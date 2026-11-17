@@ -9,8 +9,13 @@ export interface StatusState {
   bookmarkRef?: string;
 }
 
+/** Claude is working and the extension is on: spinner and highlight colour are shown. */
+export function showsBusy(s: StatusState): boolean {
+  return s.enabled && s.busy;
+}
+
 export function statusText(s: StatusState): string {
-  const icon = s.enabled && s.busy ? '$(book) $(loading~spin)' : '$(book)';
+  const icon = showsBusy(s) ? '$(book) $(loading~spin)' : '$(book)';
   return `${icon} Quran: ${s.enabled ? 'On' : 'Off'}`;
 }
 
