@@ -5,6 +5,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-17
+
 ### Added
 - The status bar item turns gold while Claude Code is working. Change it with `workbench.colorCustomizations` → `quranForClaudeCode.statusBarBusyForeground`.
 

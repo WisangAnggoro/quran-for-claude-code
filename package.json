@@ -3,7 +3,7 @@
   "displayName": "Quran for Claude Code (Unofficial)",
   "description": "Unofficial community extension. Not affiliated with or endorsed by Anthropic. Read the Quran while Claude Code works — totally offline.",
   "icon": "media/icon.png",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "WisangJatiAnggoro",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
