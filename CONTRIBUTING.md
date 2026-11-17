@@ -45,3 +45,18 @@ The script refuses to run unless every file matches its recorded SHA-256, checks
 - Small, focused commits.
 - `npm run lint && npm test` must pass.
 - Update `CHANGELOG.md`, and `PLAN.md` checkboxes where relevant.
+
+## Releasing (maintainers)
+
+Releases are published by [`.github/workflows/release.yml`](.github/workflows/release.yml) when a version tag is pushed. It uses Trusted Publishing (short-lived OIDC tokens), so no access tokens are stored anywhere.
+
+1. Bump `version` in `package.json` (and `package-lock.json`: `npm install --package-lock-only`).
+2. Add a `## [x.y.z] - YYYY-MM-DD` section to `CHANGELOG.md`. The workflow uses it as the release notes and fails without it.
+3. Commit, then push a matching tag:
+   ```sh
+   git tag vX.Y.Z && git push origin main vX.Y.Z
+   ```
+
+The workflow checks that the tag matches `package.json`, runs lint and tests, packages one `.vsix`, and publishes it to the VS Code Marketplace, Open VSX, and a GitHub release.
+
+One-time setup (already done for this repo once registered): register a trusted publisher for repository `WisangAnggoro/quran-for-claude-code`, workflow `release.yml`, no environment, on both the Marketplace publisher page (**Trusted Publishing** tab) and the Open VSX extension settings page (**Trusted Publishers**).

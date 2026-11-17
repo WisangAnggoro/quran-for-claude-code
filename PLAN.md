@@ -80,7 +80,8 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] First Marketplace release (0.1.0 uploaded 2026-11-16, public): upload the `.vsix` at marketplace.visualstudio.com/manage (no token needed). Azure DevOps global PATs are retired on 2026-12-01, so `vsce login` with a PAT is not used.
 - [x] Open VSX: 0.1.0 live and public at open-vsx.org/extension/WisangJatiAnggoro/quran-for-claude-code (namespace `WisangJatiAnggoro` verified via EclipseFdn/open-vsx.org#15792; uploaded through the web Publish page).
 - [x] Tag `v0.1.0`, GitHub release with the `.vsix` (github.com/WisangAnggoro/quran-for-claude-code/releases/tag/v0.1.0).
-- [ ] Optional later: GitHub Actions + Marketplace Trusted Publishing (`vsce publish --oidc`) so tagged releases publish automatically.
+- [x] Release workflow `.github/workflows/release.yml`: on tag `v*`, checks tag == package.json version, lint, test, package, `vsce publish --oidc`, `ovsx publish --trusted-publishing`, GitHub release with CHANGELOG notes.
+- [ ] Register trusted publishers (repo `WisangAnggoro/quran-for-claude-code`, workflow `release.yml`, no environment) on the Marketplace (Trusted Publishing tab) and Open VSX (extension settings → Trusted Publishers); first real run on the next version tag.
 
 ## Open questions
 1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
