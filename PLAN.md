@@ -82,7 +82,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] Tag `v0.1.0`, GitHub release with the `.vsix` (github.com/WisangAnggoro/quran-for-claude-code/releases/tag/v0.1.0).
 - [x] Release workflow `.github/workflows/release.yml`: on tag `v*`, checks tag == package.json version, lint, test, package, `vsce publish --oidc`, `ovsx publish --trusted-publishing`, GitHub release with CHANGELOG notes.
 - [x] Register trusted publishers (repo `WisangAnggoro/quran-for-claude-code`, workflow `release.yml`, no environment) on the Marketplace (policy "Release workflow", active) and Open VSX (extension settings → Trusted Publishers).
-- [ ] First tag-driven release (0.1.1) to prove Trusted Publishing on both stores.
+- [x] First tag-driven release (0.1.1, 2026-11-17): workflow run 44010705466 succeeded; Marketplace (`vsce publish --oidc`) and Open VSX (`ovsx publish --trusted-publishing`) both accepted the OIDC token, GitHub release created with the `.vsix`.
 
 ## Open questions
 1. ~~**Remote / WSL:** decide `extensionKind` order.~~ Decided: `["workspace", "ui"]` (SPEC §8). Still needs a manual test in Remote-WSL and Remote-SSH during Phase 5.
