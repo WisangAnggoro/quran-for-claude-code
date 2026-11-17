@@ -77,6 +77,16 @@ All commands start with **Quran:** in the Command Palette.
 | `quranForClaudeCode.navigationDirection` | `ltr` | `ltr`: `Next →` on the right, → key moves forward. `rtl`: `← Next` on the left, ← key moves forward (follows the Arabic reading direction). |
 | `quranForClaudeCode.staleBusyMinutes` | `30` | Treat Claude Code as idle after this long without a Stop event |
 
+## Colours
+
+While Claude Code is working, the status bar item spins and turns gold. To change the colour, add this to your settings:
+
+```json
+"workbench.colorCustomizations": {
+  "quranForClaudeCode.statusBarBusyForeground": "#4EC9B0"
+}
+```
+
 ## Privacy
 
 - No network access of any kind: no telemetry, no CDN, no remote fonts or APIs. The webview runs under a strict Content Security Policy.
