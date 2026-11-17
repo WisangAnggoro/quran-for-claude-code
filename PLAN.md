@@ -78,7 +78,7 @@ Each phase ends in a working, testable state. Check items off as they land.
 - [x] `vsce package` → install `.vsix` locally → smoke test (installed in WSL and native Windows VS Code; used with Claude Code on both).
 - [x] Set version `0.1.0`; turn CHANGELOG "Unreleased" into `0.1.0`.
 - [x] First Marketplace release (0.1.0 uploaded 2026-11-16, public): upload the `.vsix` at marketplace.visualstudio.com/manage (no token needed). Azure DevOps global PATs are retired on 2026-12-01, so `vsce login` with a PAT is not used.
-- [ ] Open VSX: publisher agreement signed, namespace `WisangJatiAnggoro` created, 0.1.0 uploaded via the web Publish page (2026-11-16). Inactive until the namespace ownership claim is approved: EclipseFdn/open-vsx.org#15792 (Option 1: Marketplace publisher with repo owned by the requesting GitHub account). Then check the public page and icon.
+- [x] Open VSX: 0.1.0 live and public at open-vsx.org/extension/WisangJatiAnggoro/quran-for-claude-code (namespace `WisangJatiAnggoro` verified via EclipseFdn/open-vsx.org#15792; uploaded through the web Publish page).
 - [x] Tag `v0.1.0`, GitHub release with the `.vsix` (github.com/WisangAnggoro/quran-for-claude-code/releases/tag/v0.1.0).
 - [ ] Optional later: GitHub Actions + Marketplace Trusted Publishing (`vsce publish --oidc`) so tagged releases publish automatically.
 
